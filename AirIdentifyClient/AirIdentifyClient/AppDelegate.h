@@ -24,6 +24,7 @@
 #import <GracenoteMusicID/GNOperations.h>
 
 #import "GUIDelegate.h"
+#import <Accounts/Accounts.h>
 
 
 typedef enum
@@ -56,8 +57,15 @@ typedef enum
 
 @property (weak) id<GUIDelegate> guidelegate;
 
+@property (copy, nonatomic) NSString *currentlyPlayingTrackID;
+
+@property (strong, nonatomic)          ACAccountStore *accountStore;
+@property (strong, nonatomic)          ACAccount      *twitterAccount;
+
 
 -(void)fileSearchResultReceived:(GNSearchResult*) fileSearchResult;
 -(void)fingerprintSearchResultReceived:(GNSearchResult*) fingerprintSearchResult;
+-(void)sendSelectedTrackToConnectedPeers;
+-(BOOL)userHasAccessToTwitter;
 
 @end

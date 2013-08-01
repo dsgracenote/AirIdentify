@@ -8,6 +8,8 @@
 
 #import "ViewController.h"
 #import "AppDelegate.h"
+#import <Accounts/Accounts.h>
+#import <Social/Social.h>
 
 @interface ViewController ()
 
@@ -39,8 +41,19 @@
     [self.whatsPlayingView.layer setBorderWidth:2.0];
     [self.whatsPlayingView.layer setCornerRadius:5.0];
     
+    self.currentlyPlayingInfoLabel.clipsToBounds = YES;
+    self.currentlyPlayingParentView.clipsToBounds = YES;
     
+    self.thumbsUpButton.enabled = NO;
     
+    /*
+    // Dummy data
+    NSDictionary *dictionary = [NSDictionary dictionaryWithObjectsAndKeys:@"test", @"artist", @"test-track", @"track-title",nil];
+    NSData *data = [NSKeyedArchiver archivedDataWithRootObject:dictionary];
+    [self displayCurrentlyPlayingTrackWithData:data];
+     */
+    
+
     [appDelegate setGuidelegate:self];
 }
 
@@ -107,8 +120,11 @@
 
 #pragma mark - GUIDelegate Methods
 
+
+
 -(void) displayCurrentlyPlayingTrackWithData:(NSData*) data
 {
+    self.thumbsUpButton.enabled = YES;
     NSDictionary *unarchDictionary = (NSDictionary*) [NSKeyedUnarchiver unarchiveObjectWithData:data];
     self.currentlyPlayingArtistLabel.text = [unarchDictionary objectForKey:@"artist"];
     self.currentlyPlayingTrackTitleLabel.text = [unarchDictionary objectForKey:@"track-title"];
@@ -120,7 +136,18 @@
       self.currentlyPlayingCoverart.image = [UIImage imageWithData:[unarchDictionary objectForKey:@"coverart-url"]];
     }
     
+    self.currentlyPlayingInfoLabel.text = [NSString stringWithFormat:@"%@/%@", [unarchDictionary objectForKey:@"track-title"], [unarchDictionary objectForKey:@"artist"]];
+                                           
+    __block CGRect rect = self.currentlyPlayingInfoLabel.frame;
     
+    [UIView animateWithDuration:20.0 delay:0.0 options:UIViewAnimationOptionCurveEaseInOut animations:^{
+        [UIView setAnimationBeginsFromCurrentState:YES];
+        [UIView setAnimationRepeatCount:3];
+        rect.origin.x = -1 * (self.currentlyPlayingInfoLabel.frame.origin.x + self.currentlyPlayingInfoLabel.frame.size.width+ 10);
+        self.currentlyPlayingInfoLabel.frame = rect;
+    } completion:nil];
+    
+    /*
     __block CGRect rect = self.whatsPlayingView.frame;
     self.whatsPlayingView.hidden = NO;
     
@@ -134,8 +161,15 @@
         rect.origin.y = -1*rect.size.height;
         self.whatsPlayingView.frame = rect;
     } completion:nil];
-    
+    */
     
 }
+
+
+- (IBAction)thumbsUpSelection:(id)sender{
+    AppDelegate *appDelegate = (AppDelegate*)[UIApplication sharedApplication].delegate;
+    [appDelegate sendSelectedTrackToConnectedPeers];
+}
+
 
 @end
