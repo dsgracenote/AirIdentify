@@ -7,7 +7,6 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		F625B6DC17A8CFF200EE9001 /* GracenoteMusicID.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F625B6DB17A8CFF200EE9001 /* GracenoteMusicID.framework */; };
 		F625B70417A9B54A00EE9001 /* libxml2.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = F625B70317A9B54A00EE9001 /* libxml2.dylib */; };
 		F625B70617A9B55100EE9001 /* libz.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = F625B70517A9B55100EE9001 /* libz.dylib */; };
 		F625B70817A9B56600EE9001 /* libsqlite3.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = F625B70717A9B56600EE9001 /* libsqlite3.dylib */; };
@@ -29,6 +28,12 @@
 		F65B91AE17A76F0800B59799 /* AirIdentifyServerTests.m in Sources */ = {isa = PBXBuildFile; fileRef = F65B91AD17A76F0800B59799 /* AirIdentifyServerTests.m */; };
 		F6B7B56F17AA346D00279FD0 /* FingerprintSearchResult.m in Sources */ = {isa = PBXBuildFile; fileRef = F6B7B56B17AA346D00279FD0 /* FingerprintSearchResult.m */; };
 		F6B7B57017AA346D00279FD0 /* AudioFileSearchResult.m in Sources */ = {isa = PBXBuildFile; fileRef = F6B7B56D17AA346D00279FD0 /* AudioFileSearchResult.m */; };
+		F6B7B57317AADB4A00279FD0 /* Model.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = F6B7B57117AADB4A00279FD0 /* Model.xcdatamodeld */; };
+		F6B7B57617AAE23300279FD0 /* TrackHistory.m in Sources */ = {isa = PBXBuildFile; fileRef = F6B7B57517AAE23300279FD0 /* TrackHistory.m */; };
+		F6B7B57917AAE23300279FD0 /* TrackInfo.m in Sources */ = {isa = PBXBuildFile; fileRef = F6B7B57817AAE23300279FD0 /* TrackInfo.m */; };
+		F6B7B57C17AAE23300279FD0 /* User.m in Sources */ = {isa = PBXBuildFile; fileRef = F6B7B57B17AAE23300279FD0 /* User.m */; };
+		F6B7B57E17AAE39200279FD0 /* CoreData.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F6B7B57D17AAE39200279FD0 /* CoreData.framework */; };
+		F6B7B58017AAE3C700279FD0 /* GracenoteMusicID.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F6B7B57F17AAE3C700279FD0 /* GracenoteMusicID.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -42,7 +47,6 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
-		F625B6DB17A8CFF200EE9001 /* GracenoteMusicID.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = GracenoteMusicID.framework; path = ../../../../../../../Downloads/GN_Music_SDK_iOS_3_2_0_144/GracenoteMusicID.framework; sourceTree = "<group>"; };
 		F625B70317A9B54A00EE9001 /* libxml2.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libxml2.dylib; path = usr/lib/libxml2.dylib; sourceTree = SDKROOT; };
 		F625B70517A9B55100EE9001 /* libz.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libz.dylib; path = usr/lib/libz.dylib; sourceTree = SDKROOT; };
 		F625B70717A9B56600EE9001 /* libsqlite3.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libsqlite3.dylib; path = usr/lib/libsqlite3.dylib; sourceTree = SDKROOT; };
@@ -72,6 +76,15 @@
 		F6B7B56C17AA346D00279FD0 /* FingerprintSearchResult.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = FingerprintSearchResult.h; path = ../../../FingerprintSearchResult.h; sourceTree = "<group>"; };
 		F6B7B56D17AA346D00279FD0 /* AudioFileSearchResult.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = AudioFileSearchResult.m; path = ../../../AudioFileSearchResult.m; sourceTree = "<group>"; };
 		F6B7B56E17AA346D00279FD0 /* AudioFileSearchResult.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AudioFileSearchResult.h; path = ../../../AudioFileSearchResult.h; sourceTree = "<group>"; };
+		F6B7B57217AADB4A00279FD0 /* Model.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = Model.xcdatamodel; sourceTree = "<group>"; };
+		F6B7B57417AAE23300279FD0 /* TrackHistory.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = TrackHistory.h; path = AirIdentifyServer/TrackHistory.h; sourceTree = "<group>"; };
+		F6B7B57517AAE23300279FD0 /* TrackHistory.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = TrackHistory.m; path = AirIdentifyServer/TrackHistory.m; sourceTree = "<group>"; };
+		F6B7B57717AAE23300279FD0 /* TrackInfo.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = TrackInfo.h; path = AirIdentifyServer/TrackInfo.h; sourceTree = "<group>"; };
+		F6B7B57817AAE23300279FD0 /* TrackInfo.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = TrackInfo.m; path = AirIdentifyServer/TrackInfo.m; sourceTree = "<group>"; };
+		F6B7B57A17AAE23300279FD0 /* User.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = User.h; path = AirIdentifyServer/User.h; sourceTree = "<group>"; };
+		F6B7B57B17AAE23300279FD0 /* User.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = User.m; path = AirIdentifyServer/User.m; sourceTree = "<group>"; };
+		F6B7B57D17AAE39200279FD0 /* CoreData.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreData.framework; path = System/Library/Frameworks/CoreData.framework; sourceTree = SDKROOT; };
+		F6B7B57F17AAE3C700279FD0 /* GracenoteMusicID.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = GracenoteMusicID.framework; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -79,10 +92,11 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				F6B7B57E17AAE39200279FD0 /* CoreData.framework in Frameworks */,
 				F625B70817A9B56600EE9001 /* libsqlite3.dylib in Frameworks */,
 				F625B70617A9B55100EE9001 /* libz.dylib in Frameworks */,
 				F625B70417A9B54A00EE9001 /* libxml2.dylib in Frameworks */,
-				F625B6DC17A8CFF200EE9001 /* GracenoteMusicID.framework in Frameworks */,
+				F6B7B58017AAE3C700279FD0 /* GracenoteMusicID.framework in Frameworks */,
 				F65B917F17A76F0700B59799 /* CoreGraphics.framework in Frameworks */,
 				F65B918117A76F0700B59799 /* UIKit.framework in Frameworks */,
 				F65B917D17A76F0700B59799 /* Foundation.framework in Frameworks */,
@@ -105,6 +119,8 @@
 		F65B917017A76F0700B59799 = {
 			isa = PBXGroup;
 			children = (
+				F6B7B58217AAE48C00279FD0 /* Managed Object Model */,
+				F6B7B58117AAE47200279FD0 /* Managed Objects */,
 				F65B918217A76F0700B59799 /* AirIdentifyServer */,
 				F65B91A717A76F0800B59799 /* AirIdentifyServerTests */,
 				F65B917B17A76F0700B59799 /* Frameworks */,
@@ -124,10 +140,11 @@
 		F65B917B17A76F0700B59799 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				F6B7B57D17AAE39200279FD0 /* CoreData.framework */,
 				F625B70717A9B56600EE9001 /* libsqlite3.dylib */,
 				F625B70517A9B55100EE9001 /* libz.dylib */,
+				F6B7B57F17AAE3C700279FD0 /* GracenoteMusicID.framework */,
 				F625B70317A9B54A00EE9001 /* libxml2.dylib */,
-				F625B6DB17A8CFF200EE9001 /* GracenoteMusicID.framework */,
 				F65B917C17A76F0700B59799 /* Foundation.framework */,
 				F65B917E17A76F0700B59799 /* CoreGraphics.framework */,
 				F65B918017A76F0700B59799 /* UIKit.framework */,
@@ -184,6 +201,27 @@
 				F65B91AA17A76F0800B59799 /* InfoPlist.strings */,
 			);
 			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+		F6B7B58117AAE47200279FD0 /* Managed Objects */ = {
+			isa = PBXGroup;
+			children = (
+				F6B7B57A17AAE23300279FD0 /* User.h */,
+				F6B7B57B17AAE23300279FD0 /* User.m */,
+				F6B7B57717AAE23300279FD0 /* TrackInfo.h */,
+				F6B7B57817AAE23300279FD0 /* TrackInfo.m */,
+				F6B7B57417AAE23300279FD0 /* TrackHistory.h */,
+				F6B7B57517AAE23300279FD0 /* TrackHistory.m */,
+			);
+			name = "Managed Objects";
+			sourceTree = "<group>";
+		};
+		F6B7B58217AAE48C00279FD0 /* Managed Object Model */ = {
+			isa = PBXGroup;
+			children = (
+				F6B7B57117AADB4A00279FD0 /* Model.xcdatamodeld */,
+			);
+			name = "Managed Object Model";
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -284,9 +322,13 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				F6B7B57C17AAE23300279FD0 /* User.m in Sources */,
+				F6B7B57617AAE23300279FD0 /* TrackHistory.m in Sources */,
 				F65B919917A76F0800B59799 /* SecondViewController.m in Sources */,
+				F6B7B57917AAE23300279FD0 /* TrackInfo.m in Sources */,
 				F65B918D17A76F0700B59799 /* AppDelegate.m in Sources */,
 				F65B919617A76F0800B59799 /* FirstViewController.m in Sources */,
+				F6B7B57317AADB4A00279FD0 /* Model.xcdatamodeld in Sources */,
 				F65B918917A76F0700B59799 /* main.m in Sources */,
 				F6B7B56F17AA346D00279FD0 /* FingerprintSearchResult.m in Sources */,
 				F6B7B57017AA346D00279FD0 /* AudioFileSearchResult.m in Sources */,
@@ -425,6 +467,7 @@
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					/Users/kdeshpande/Downloads/GN_Music_SDK_iOS_3_2_0_144,
+					/Users/kdeshpande/development/AirIdentify/AirIdentifyServer/AirIdentifyServer,
 				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "AirIdentifyServer/AirIdentifyServer-Prefix.pch";
@@ -443,6 +486,7 @@
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					/Users/kdeshpande/Downloads/GN_Music_SDK_iOS_3_2_0_144,
+					/Users/kdeshpande/development/AirIdentify/AirIdentifyServer/AirIdentifyServer,
 				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "AirIdentifyServer/AirIdentifyServer-Prefix.pch";
@@ -524,6 +568,19 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCVersionGroup section */
+		F6B7B57117AADB4A00279FD0 /* Model.xcdatamodeld */ = {
+			isa = XCVersionGroup;
+			children = (
+				F6B7B57217AADB4A00279FD0 /* Model.xcdatamodel */,
+			);
+			currentVersion = F6B7B57217AADB4A00279FD0 /* Model.xcdatamodel */;
+			path = Model.xcdatamodeld;
+			sourceTree = "<group>";
+			versionGroupType = wrapper.xcdatamodel;
+		};
+/* End XCVersionGroup section */
 	};
 	rootObject = F65B917117A76F0700B59799 /* Project object */;
 }

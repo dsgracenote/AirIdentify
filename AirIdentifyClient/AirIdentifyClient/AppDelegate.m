@@ -107,10 +107,13 @@
    if([self.musicPlayerController playbackState]==MPMusicPlaybackStatePlaying)
    {
        MPMediaItem *item = [self.musicPlayerController nowPlayingItem];
-       NSURL *url = [item valueForKey:MPMediaItemPropertyAssetURL];
+       NSURL *url = [item valueForProperty:MPMediaItemPropertyAssetURL];
        
-       GNConfig *config = [GNConfig init:CLIENTID];
-       [GNOperations recognizeMIDFileFromFile:self.audioFileSearchResult config:config fileUrl:url];
+       if(url)
+       {
+        GNConfig *config = [GNConfig init:CLIENTID];
+        [GNOperations recognizeMIDFileFromFile:self.audioFileSearchResult config:config fileUrl:url];
+       }
    }
    else if([audioSession isOtherAudioPlaying])
    {
