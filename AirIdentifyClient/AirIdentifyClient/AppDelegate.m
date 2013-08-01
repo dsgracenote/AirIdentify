@@ -169,7 +169,6 @@
     
         NSData *archivedData = [NSKeyedArchiver archivedDataWithRootObject:infoDict];
         
-        
         [self.guidelegate displayCurrentlyPlayingTrackWithData:archivedData];
     
 }
@@ -302,7 +301,6 @@
 {
     NSError *error = nil;
     NSDictionary *resultsDictionary = @{@"fingerprint":result.fingerprintData, @"peerName":[UIDevice currentDevice].name};
-    
     NSData *data = [NSKeyedArchiver archivedDataWithRootObject:resultsDictionary];
     
     [self.mcsession sendData:data toPeers:[self.mcsession connectedPeers] withMode:MCSessionSendDataReliable error:&error];
@@ -410,6 +408,8 @@
             break;
     }
 }
+
+
 
 // Received data from remote peer
 - (void)session:(MCSession *)session didReceiveData:(NSData *)data fromPeer:(MCPeerID *)peerID

@@ -22,6 +22,9 @@
 @property (strong, nonatomic) IBOutlet UIImageView *currentlyPlayingCoverart;
 @property (strong, nonatomic) IBOutlet UILabel *currentlyPlayingArtistLabel;
 @property (strong, nonatomic) IBOutlet UILabel *currentlyPlayingTrackTitleLabel;
+@property (strong, nonatomic) IBOutlet UIView *currentlyPlayingParentView;
+
+@property (strong, nonatomic) IBOutlet UILabel *currentlyPlayingInfoLabel;
 
 
 - (IBAction)skipToNextItem:(id)sender;

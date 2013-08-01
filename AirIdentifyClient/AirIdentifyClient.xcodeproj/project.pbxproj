@@ -85,6 +85,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				F625B6DA17A8BD3200EE9001 /* GracenoteMusicID.framework in Frameworks */,
 				F625B6FA17A8DAE800EE9001 /* CoreFoundation.framework in Frameworks */,
 				F625B6EE17A8D9A800EE9001 /* libsqlite3.dylib in Frameworks */,
 				F625B6EC17A8D99400EE9001 /* libz.dylib in Frameworks */,
@@ -93,7 +94,6 @@
 				F625B6E617A8D92800EE9001 /* AVFoundation.framework in Frameworks */,
 				F625B6E017A8D8E700EE9001 /* AudioToolbox.framework in Frameworks */,
 				F625B6DE17A8D8C200EE9001 /* Security.framework in Frameworks */,
-				F625B6DA17A8BD3200EE9001 /* GracenoteMusicID.framework in Frameworks */,
 				F625B69B17A8774700EE9001 /* UIKit.framework in Frameworks */,
 				F625B69717A8774700EE9001 /* Foundation.framework in Frameworks */,
 			);
@@ -445,6 +445,7 @@
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					/Users/kdeshpande/Perforce/m_kdeshpande/m_kdeshpande/hackathon/AirIdentify,
+					/Users/dspirlock/src/demos/AirIdentify,
 				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "AirIdentifyClient/AirIdentifyClient-Prefix.pch";
@@ -465,6 +466,7 @@
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					/Users/kdeshpande/Perforce/m_kdeshpande/m_kdeshpande/hackathon/AirIdentify,
+					/Users/dspirlock/src/demos/AirIdentify,
 				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "AirIdentifyClient/AirIdentifyClient-Prefix.pch";
