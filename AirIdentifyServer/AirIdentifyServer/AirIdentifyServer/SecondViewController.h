@@ -15,5 +15,6 @@
 @property (strong, nonatomic) IBOutlet UIPickerView *serviceTypePicker;
 @property (strong, nonatomic) IBOutlet UIPickerView *specificServiceTypePicker;
 @property (strong, nonatomic) IBOutlet UIView *segmentedControlView;
+@property (strong, nonatomic) IBOutlet UIView *resetSegmentedControlView;
 @property (strong, nonatomic) IBOutlet UILabel *connectionStatusLabel;
 @end

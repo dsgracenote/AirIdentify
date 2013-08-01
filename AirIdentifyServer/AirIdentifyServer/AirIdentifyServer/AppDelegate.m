@@ -8,6 +8,8 @@
 
 #import "AppDelegate.h"
 #import "AudioFileSearchResult.h"
+#import "FingerprintSearchResult.h"
+#import "TrackIDSearchResult.h"
 
 #import <GracenoteMusicID/GNSearchResponse.h>
 #import <GracenoteMusicID/GNCoverArt.h>
@@ -15,15 +17,22 @@
 #import <GracenoteMusicID/GNOperations.h>
 
 #import <CoreData/CoreData.h>
+#import  "User.h"
+#import "TrackInfo.h"
+#import "TrackHistory.h"
 
 @interface AppDelegate()
 
 @property (strong, nonatomic) NSMutableDictionary *connectedClients;
 
+@property (strong, nonatomic) NSMutableDictionary *userInfoForTrackIDDict;
+
 @property (strong, nonatomic) GNRecognizeStream *recognizeStream;
 @property (strong, nonatomic) GNAudioSourceMic *audioSourceMic;
 
 @property (strong, nonatomic) AudioFileSearchResult *audioFileSearchResult;
+@property (strong, nonatomic) FingerprintSearchResult *fingerprintSearchResult;
+@property(strong, nonatomic) TrackIDSearchResult *trackIDSearchResult;
 
 @end
 
@@ -48,8 +57,11 @@
     self.peerID = nil;
     
     self.connectedClients = [NSMutableDictionary dictionaryWithCapacity:10];
+    self.userInfoForTrackIDDict = [NSMutableDictionary dictionaryWithCapacity:10];
     
     self.audioFileSearchResult = [[AudioFileSearchResult alloc] init];
+     self.fingerprintSearchResult = [[FingerprintSearchResult alloc] init];
+    self.trackIDSearchResult = [[TrackIDSearchResult alloc] init];
 
     return YES;
 }
@@ -82,6 +94,13 @@
 }
 
 
+-(void) identifyAudioPlayingOnClientDeviceFromFingerprint:(NSString*) fingerprint
+{
+    GNConfig *config = [GNConfig init:CLIENTID];
+    
+    [GNOperations searchByFingerprint:self.fingerprintSearchResult config:config fingerprintData:fingerprint];
+}
+
 #pragma mark - Fingerprint Search Result Received
 
 -(void)fingerprintSearchResultReceived:(GNSearchResult*) fingerprintSearchResult
@@ -99,6 +118,22 @@
         NSLog(@"archivedData = %@", archivedData);
     }
     
+}
+
+
+
+-(void) identifyAudioPlayingOnClientDeviceFromTrackId:(NSString*) trackID
+{
+    GNConfig *config = [GNConfig init:CLIENTID];
+    
+    [GNOperations fetchByTrackId:self.trackIDSearchResult config:config trackId:trackID];
+}
+
+#pragma mark - TrackID Search Result Received
+
+-(void)trackidSearchResultReceived:(GNSearchResult*) trackidSearchResult
+{
+    [self addUserInfoToDB:trackidSearchResult];
 }
 
 #pragma mark - File Search Result Received
@@ -236,9 +271,15 @@
 {
     NSDictionary *userInfoDictionary = (NSDictionary*) [NSKeyedUnarchiver unarchiveObjectWithData:data];
     
+    NSString *trackID = [userInfoDictionary objectForKey:@"track-id"];
+    
     UILocalNotification *alert = [[UILocalNotification alloc] init];
     alert.alertBody = [NSString stringWithFormat:@"Received data from peer - %@", peerID.displayName ];
     [[UIApplication sharedApplication] presentLocalNotificationNow:alert];
+    
+    [self.userInfoForTrackIDDict setObject:userInfoDictionary forKey:trackID];
+    
+    [self identifyAudioPlayingOnClientDeviceFromTrackId:trackID];
     
     NSLog(@"Received data %@", userInfoDictionary);
       
@@ -269,7 +310,84 @@
 }
 
 
-#pragma mark - Core Data 
+#pragma mark - Serializing Data to Core Data DB
+
+-(void)addUserInfoToDB:(GNSearchResult*) trackidSearchResult
+{
+    NSLog(@"Adding UserInfo to DB");
+    
+    GNSearchResponse *bestResponse = trackidSearchResult.bestResponse;
+    
+    NSDictionary *userInfoDictionary = [self.userInfoForTrackIDDict objectForKey:bestResponse.trackId];
+    
+    NSEntityDescription *entity = [NSEntityDescription entityForName:@"User" inManagedObjectContext:self.managedObjectContext];
+    NSFetchRequest* fetchRequest = [[NSFetchRequest alloc] init];
+    [fetchRequest setEntity:entity];
+    [fetchRequest setFetchBatchSize:25];
+    
+    fetchRequest.predicate = [NSPredicate predicateWithFormat:@"userID==%@", [userInfoDictionary objectForKey:@"user-id"]];
+    
+    fetchRequest.sortDescriptors = @[[NSSortDescriptor sortDescriptorWithKey:@"userID" ascending:YES]];
+    
+    NSFetchedResultsController *fetchedResultsController = [[NSFetchedResultsController alloc] initWithFetchRequest:fetchRequest managedObjectContext:self.managedObjectContext sectionNameKeyPath:nil cacheName:nil];
+    
+    if([fetchedResultsController fetchedObjects].count)
+    {
+       User *user = [[fetchedResultsController fetchedObjects] lastObject];
+       NSSet *trackIDSet = [user.trackhistory valueForKeyPath:@"trackinfo.trackID"];
+       NSArray *trackIDs = [trackIDSet allObjects];
+       trackIDs = [trackIDs filteredArrayUsingPredicate:[NSPredicate predicateWithFormat:@"self==%@",bestResponse.trackId]];
+        
+        if(trackIDs.count==0)
+        {
+            TrackInfo *trackInfoObject = [NSEntityDescription insertNewObjectForEntityForName:@"TrackInfo" inManagedObjectContext:self.managedObjectContext];
+            
+            trackInfoObject.trackID = bestResponse.trackId;
+            trackInfoObject.trackTitle = bestResponse.trackTitle;
+            trackInfoObject.albumName = bestResponse.albumTitle;
+            trackInfoObject.artistName = bestResponse.artist;
+            
+            NSMutableSet *mutableSet = [NSMutableSet setWithSet:user.trackhistory.trackinfo];
+            [mutableSet addObject:trackInfoObject];
+            
+            user.trackhistory.trackinfo = mutableSet;
+        }
+    }
+    else
+    {
+       NSLog(@"Creating new User......");
+        
+       User *user = [NSEntityDescription insertNewObjectForEntityForName:@"User" inManagedObjectContext:self.managedObjectContext];
+        
+        TrackHistory *trackHistory = [NSEntityDescription insertNewObjectForEntityForName:@"TrackHistory" inManagedObjectContext:self.managedObjectContext];
+        
+        user.userID = [userInfoDictionary objectForKey:@"user-id"];
+        user.userName = [userInfoDictionary objectForKey:@"user-name"];
+        user.twitter = [userInfoDictionary objectForKey:@"twitter"];
+        
+        
+        TrackInfo *trackInfoObject = [NSEntityDescription insertNewObjectForEntityForName:@"TrackInfo" inManagedObjectContext:self.managedObjectContext];
+        
+        trackInfoObject.trackID = bestResponse.trackId;
+        trackInfoObject.trackTitle = bestResponse.trackTitle;
+        trackInfoObject.albumName = bestResponse.albumTitle;
+        trackInfoObject.artistName = bestResponse.artist;
+        
+        NSMutableSet *mutableSet = [NSMutableSet setWithSet:user.trackhistory.trackinfo];
+        [mutableSet addObject:trackInfoObject];
+        
+        user.trackhistory = trackHistory;
+        
+        user.trackhistory.trackinfo = mutableSet;
+        
+    }
+    
+    [self saveContext];
+    
+}
+
+
+#pragma mark - Core Data
 
 - (void)saveContext
 {
@@ -322,7 +440,7 @@
     {
         return __managedObjectModel;
     }
-    NSURL *modelURL = [[NSBundle mainBundle] URLForResource:@"AirServer" withExtension:@"momd"];
+    NSURL *modelURL = [[NSBundle mainBundle] URLForResource:@"Model" withExtension:@"momd"];
     __managedObjectModel = [[NSManagedObjectModel alloc] initWithContentsOfURL:modelURL];
     return __managedObjectModel;
 }

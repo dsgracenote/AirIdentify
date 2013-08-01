@@ -68,6 +68,8 @@
     
     self.connectedPeers = [NSMutableDictionary dictionaryWithCapacity:2];
     
+    self.accountStore = [[ACAccountStore alloc] init];
+    
     if ([self userHasAccessToTwitter])
     {
         
