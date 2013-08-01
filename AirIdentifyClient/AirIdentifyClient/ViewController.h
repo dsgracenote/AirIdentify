@@ -24,7 +24,8 @@
 @property (strong, nonatomic) IBOutlet UILabel *currentlyPlayingArtistLabel;
 @property (strong, nonatomic) IBOutlet UILabel *currentlyPlayingTrackTitleLabel;
 @property (strong, nonatomic) IBOutlet UIView *currentlyPlayingParentView;
-@property (strong, nonatomic) IBOutlet UIBarButtonItem *thumbsUpButton;
+@property (strong, nonatomic) IBOutlet UIButton *thumbsUpButton;
+@property (strong, nonatomic) IBOutlet UIButton *thumbsDownButton;
 
 @property (strong, nonatomic) IBOutlet UILabel *currentlyPlayingInfoLabel;
 
