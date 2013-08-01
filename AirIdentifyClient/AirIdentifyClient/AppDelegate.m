@@ -38,6 +38,8 @@
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
     // Override point for customization after application launch.
+    [application setIdleTimerDisabled:YES];
+    
     self.audioFileSearchResult = [[AudioFileSearchResult alloc] init];
     self.fingerprintSearchResult = [[FingerprintSearchResult alloc] init];
     
