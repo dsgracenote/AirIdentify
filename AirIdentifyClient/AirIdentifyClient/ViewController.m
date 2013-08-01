@@ -47,12 +47,12 @@
     self.thumbsUpButton.hidden = YES;
     self.thumbsDownButton.hidden = YES;
     
-    
+    /*
     // Dummy data
     NSDictionary *dictionary = [NSDictionary dictionaryWithObjectsAndKeys:@"test", @"artist", @"test-track", @"track-title",nil];
     NSData *data = [NSKeyedArchiver archivedDataWithRootObject:dictionary];
     [self displayCurrentlyPlayingTrackWithData:data];
-    
+    */
     
 
     [appDelegate setGuidelegate:self];
