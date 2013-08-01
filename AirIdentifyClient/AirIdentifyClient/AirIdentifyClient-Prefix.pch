@@ -1,0 +1,20 @@
+//
+//  Prefix header
+//
+//  The contents of this file are implicitly included at the beginning of every source file.
+//
+
+#import <Availability.h>
+
+#ifndef __IPHONE_5_0
+#warning "This project uses features only available in iOS SDK 5.0 and later."
+#endif
+
+#ifdef __OBJC__
+    #import <UIKit/UIKit.h>
+    #import <Foundation/Foundation.h>
+#endif
+
+
+#define AIRIDENTIFY_UUID @"DBA0CC6B-4F16-40EB-A849-3278C5B6528A"
+#define CLIENTID @"5375232-DA83FFC82C8A5056BBCDDD7414E40228" // replace me
