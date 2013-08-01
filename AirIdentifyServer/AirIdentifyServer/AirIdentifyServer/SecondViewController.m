@@ -15,6 +15,7 @@
 @property (strong) MCSession *session;
 
 @property (strong) UISegmentedControl *seg;
+@property (strong) UISegmentedControl *resetseg;
 
 @end
 
@@ -26,7 +27,7 @@
     self.seg = [[UISegmentedControl alloc] initWithItems:@[@"Broadcast Service"]];
     self.seg.momentary = YES;
     self.seg.tintColor = [UIColor whiteColor];
-    self.seg.backgroundColor = [UIColor colorWithRed:1 green:0 blue:0 alpha:0.8];
+    self.seg.backgroundColor = [UIColor colorWithRed:0 green:1 blue:0 alpha:0.8];
     
     CGRect rect=self.segmentedControlView.bounds;
     rect.size.height=rect.size.height/2;
@@ -40,7 +41,25 @@
     
     self.seg.enabled = NO;
     
+    self.resetseg = [[UISegmentedControl alloc] initWithItems:@[@"Stop Services"]];
+    self.resetseg.momentary = YES;
+    self.resetseg.tintColor = [UIColor whiteColor];
+    self.resetseg.backgroundColor = [UIColor colorWithRed:1 green:0 blue:0 alpha:0.8];
+    
+    rect=self.segmentedControlView.bounds;
+    rect.size.height=rect.size.height/2;
+    
+    self.resetseg.frame =rect;
+    self.resetseg.opaque = NO;
+    [self.resetSegmentedControlView addSubview:self.resetseg];
+    
+    [self.resetseg.layer setCornerRadius:5.0];
+    [self.resetseg setClipsToBounds:YES];
+    
+    
     [self.seg addTarget:self action:@selector(broadcastService:) forControlEvents:UIControlEventValueChanged];
+    
+    [self.resetseg addTarget:self action:@selector(stopServices:) forControlEvents:UIControlEventValueChanged];
     
     
 	// Do any additional setup after loading the view, typically from a nib.
@@ -125,6 +144,17 @@
     self.seg.enabled = YES;
 }
 
+-(void) stopServices:(id) sender
+{
+     AppDelegate *appDelegate = (AppDelegate*)[UIApplication sharedApplication].delegate;
+    
+    [appDelegate.peripheralManager stopAdvertising];
+    [appDelegate.peripheralManager removeAllServices];
+    
+    [self.advertiser stopAdvertisingPeer];
+    NSURLRequest
+}
+
 -(void) broadcastService:(id) sender
 {
     NSUInteger major = CARDIO_BEACON_TYPE+[self.serviceTypePicker selectedRowInComponent:0];
@@ -138,10 +168,6 @@
     
     [appDelegate.peripheralManager stopAdvertising];
     [appDelegate.peripheralManager removeAllServices];
-    
-    
-    [appDelegate.peripheralManager removeAllServices];
-    [appDelegate.peripheralManager stopAdvertising];
     
     CLBeaconRegion *region = [[CLBeaconRegion alloc] initWithProximityUUID:[[NSUUID alloc] initWithUUIDString: AIRIDENTIFY_UUID] major:major minor:minor identifier:serviceTypeFromSelectionStr];
     

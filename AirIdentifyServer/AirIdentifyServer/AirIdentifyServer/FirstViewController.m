@@ -70,7 +70,11 @@
     }
     
     if([((AppDelegate*)[UIApplication sharedApplication].delegate).musicPlayerController playbackState]== MPMoviePlaybackStatePlaying)
+    {
         [self.playButton setImage:[UIImage imageNamed:UI_USER_INTERFACE_IDIOM()==UIUserInterfaceIdiomPad?@"btn_pause_ipad" :@"player_bt_pause"] forState:UIControlStateNormal];
+        
+        [((AppDelegate*)[UIApplication sharedApplication].delegate) identifyCurrentPlayingAudioOniBeacon];
+    }
     else
         [self.playButton setImage:[UIImage imageNamed:UI_USER_INTERFACE_IDIOM()==UIUserInterfaceIdiomPad?@"btn_play_ipad":@"player_bt_play"] forState:UIControlStateNormal];
     
