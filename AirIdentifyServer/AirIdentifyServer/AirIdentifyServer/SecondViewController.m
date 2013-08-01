@@ -152,7 +152,7 @@
     [appDelegate.peripheralManager removeAllServices];
     
     [self.advertiser stopAdvertisingPeer];
-    NSURLRequest
+    
 }
 
 -(void) broadcastService:(id) sender
