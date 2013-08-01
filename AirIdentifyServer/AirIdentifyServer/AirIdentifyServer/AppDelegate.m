@@ -8,6 +8,7 @@
 
 #import "AppDelegate.h"
 #import "AudioFileSearchResult.h"
+#import "FingerprintSearchResult.h"
 
 #import <GracenoteMusicID/GNSearchResponse.h>
 #import <GracenoteMusicID/GNCoverArt.h>
@@ -24,6 +25,7 @@
 @property (strong, nonatomic) GNAudioSourceMic *audioSourceMic;
 
 @property (strong, nonatomic) AudioFileSearchResult *audioFileSearchResult;
+@property (strong, nonatomic) FingerprintSearchResult *fingerprintSearchResult;
 
 @end
 
@@ -81,6 +83,13 @@
     // Called when the application is about to terminate. Save data if appropriate. See also applicationDidEnterBackground:.
 }
 
+
+-(void) identifyAudioPlayingOnClientDeviceFromFingerprint:(NSString*) fingerprint
+{
+    GNConfig *config = [GNConfig init:CLIENTID];
+    
+    [GNOperations searchByFingerprint:self.fingerprintSearchResult config:config fingerprintData:fingerprint];
+}
 
 #pragma mark - Fingerprint Search Result Received
 

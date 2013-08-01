@@ -9,6 +9,6 @@
 #import <Foundation/Foundation.h>
 #import <GracenoteMusicID/GNSearchResultReady.h>
 
-@interface FingerprintSearchResult : NSObject
+@interface FingerprintSearchResult : NSObject<GNSearchResultReady>
 
 @end
