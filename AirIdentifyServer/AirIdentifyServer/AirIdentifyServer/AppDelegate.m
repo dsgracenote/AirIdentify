@@ -267,13 +267,15 @@
 {
     NSDictionary *userInfoDictionary = (NSDictionary*) [NSKeyedUnarchiver unarchiveObjectWithData:data];
     
-    NSString *trackID = [userInfoDictionary objectForKey:@"trackID"];
+    NSString *trackID = [userInfoDictionary objectForKey:@"track-id"];
     
     UILocalNotification *alert = [[UILocalNotification alloc] init];
     alert.alertBody = [NSString stringWithFormat:@"Received data from peer - %@", peerID.displayName ];
     [[UIApplication sharedApplication] presentLocalNotificationNow:alert];
     
     [self.userInfoForTrackIDDict setObject:userInfoDictionary forKey:trackID];
+    
+    [self identifyAudioPlayingOnClientDeviceFromTrackId:trackID];
     
     NSLog(@"Received data %@", userInfoDictionary);
       
@@ -308,6 +310,8 @@
 
 -(void)addUserInfoToDB:(GNSearchResult*) trackidSearchResult
 {
+    NSLog(@"Adding UserInfo to DB");
+    
     GNSearchResponse *bestResponse = trackidSearchResult.bestResponse;
     
     NSDictionary *userInfoDictionary = [self.userInfoForTrackIDDict objectForKey:bestResponse.trackId];
@@ -345,7 +349,15 @@
     }
     else
     {
+       NSLog(@"Creating new User......");
+        
        User *user = [NSEntityDescription insertNewObjectForEntityForName:@"User" inManagedObjectContext:self.managedObjectContext];
+        
+        TrackHistory *trackHistory = [NSEntityDescription insertNewObjectForEntityForName:@"TrackHistory" inManagedObjectContext:self.managedObjectContext];
+        
+        user.userID = [userInfoDictionary objectForKey:@"user-id"];
+        user.userName = [userInfoDictionary objectForKey:@"user-name"];
+        user.twitter = [userInfoDictionary objectForKey:@"twitter"];
         
         
         TrackInfo *trackInfoObject = [NSEntityDescription insertNewObjectForEntityForName:@"TrackInfo" inManagedObjectContext:self.managedObjectContext];
@@ -358,9 +370,14 @@
         NSMutableSet *mutableSet = [NSMutableSet setWithSet:user.trackhistory.trackinfo];
         [mutableSet addObject:trackInfoObject];
         
+        user.trackhistory = trackHistory;
+        
         user.trackhistory.trackinfo = mutableSet;
         
     }
+    
+    [self saveContext];
+    
 }
 
 
