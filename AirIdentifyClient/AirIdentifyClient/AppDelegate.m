@@ -13,6 +13,8 @@
 #import <GracenoteMusicID/GNSearchResponse.h>
 #import <GracenoteMusicID/GNCoverArt.h>
 #import <GracenoteMusicID/GNImage.h>
+#import <Social/Social.h>
+#import <Accounts/Accounts.h>
 
 @interface AppDelegate()
 
@@ -66,12 +68,86 @@
     
     self.connectedPeers = [NSMutableDictionary dictionaryWithCapacity:2];
     
+    if ([self userHasAccessToTwitter])
+    {
+        
+        //  Step 1:  Obtain access to the user's Twitter accounts
+        ACAccountType *twitterAccountType = [self.accountStore
+                                             accountTypeWithAccountTypeIdentifier:
+                                             ACAccountTypeIdentifierTwitter];
+        
+        [self.accountStore
+         requestAccessToAccountsWithType:twitterAccountType
+         options:NULL
+         completion:^(BOOL granted, NSError *error)
+         {
+             if (granted)
+             {
+                 //  Step 2:  Create a request
+                 NSArray *twitterAccounts =
+                 [self.accountStore accountsWithAccountType:twitterAccountType];
+                 
+                 self.twitterAccount = [twitterAccounts lastObject];
+                 
+                 NSURL *url = [NSURL URLWithString:@"https://api.twitter.com/1.1/statuses/home_timeline.json"];
+                 
+                 SLRequest *request =
+                 [SLRequest requestForServiceType:SLServiceTypeTwitter
+                                    requestMethod:SLRequestMethodGET
+                                              URL:url
+                                       parameters:nil];
+                 
+                 //  Attach an account to the request.
+                 
+                 [request setAccount:[twitterAccounts lastObject]];
+                 
+                 /*
+                  //  Step 3:  Execute the request.
+                  
+                  [request performRequestWithHandler:^(NSData *responseData,
+                  NSHTTPURLResponse *urlResponse,
+                  NSError *error)
+                  {
+                  
+                  if (responseData)
+                  {
+                  
+                  if (urlResponse.statusCode >= 200 && urlResponse.statusCode < 300)
+                  {
+                  NSError *jsonError;
+                  NSArray *userTimelineArray =
+                  [NSJSONSerialization
+                  JSONObjectWithData:responseData
+                  options:NSJSONReadingAllowFragments error:&jsonError];
+                  
+                  
+                  if (userTimelineArray)
+                  {
+                  
+                  NSDictionary *dictionary = [NSDictionary dictionaryWithObjectsAndKeys:TWITTERSOURCE, @"source" , userTimelineArray , @"data",nil];
+                  [self.dataHandler addTask:dictionary];
+                  
+                  
+                  }
+                  }
+                  else
+                  {
+                  // The server did not respond successfully... were we rate-limited?
+                  NSLog(@"The response status code is %d", urlResponse.statusCode);
+                  }
+                  }
+                  
+                  }];
+                  */
+             }
+         }];
+    }
     
     [self startMonitoringForAllRegions];
     
     return YES;
 }
-							
+				
 - (void)applicationWillResignActive:(UIApplication *)application
 {
     // Sent when the application is about to move from active to inactive state. This can occur for certain types of temporary interruptions (such as an incoming phone call or SMS message) or when the user quits the application and it begins the transition to the background state.
@@ -171,7 +247,9 @@
     NSDictionary *infoDict = @{@"track-title":[response trackTitle], @"album-title":response.albumTitle, @"track-duration":response.trackDuration, @"artist":response.artist, @"coverart-url":(response.coverArt && response.coverArt.data)?[response.coverArt data]:[NSNull null]};
     
         NSData *archivedData = [NSKeyedArchiver archivedDataWithRootObject:infoDict];
-        
+    
+        self.currentlyPlayingTrackID = fingerprintSearchResult.bestResponse.trackId;
+    
         [self.guidelegate displayCurrentlyPlayingTrackWithData:archivedData];
     
 }
@@ -309,6 +387,14 @@
     [self.mcsession sendData:data toPeers:[self.mcsession connectedPeers] withMode:MCSessionSendDataReliable error:&error];
 }
 
+- (void)sendSelectedTrackToConnectedPeers {
+    NSError *error = nil;
+    NSDictionary *resultsDictionary = @{@"track-id":self.currentlyPlayingTrackID, @"user-id":self.twitterAccount.identifier, @"user-name":self.twitterAccount.username};
+    NSData *data = [NSKeyedArchiver archivedDataWithRootObject:resultsDictionary];
+    
+    [self.mcsession sendData:data toPeers:[self.mcsession connectedPeers] withMode:MCSessionSendDataReliable error:&error];
+}
+
 #pragma mark - MCNearbyServiceBrowser Delegate Methods
 
 - (void)browser:(MCNearbyServiceBrowser *)browser foundPeer:(MCPeerID *)peerID withDiscoveryInfo:(NSDictionary *)info
@@ -410,6 +496,11 @@
         default:
             break;
     }
+}
+
+- (BOOL)userHasAccessToTwitter
+{
+    return [SLComposeViewController isAvailableForServiceType:SLServiceTypeTwitter];
 }
 
 

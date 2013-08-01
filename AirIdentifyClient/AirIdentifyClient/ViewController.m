@@ -8,6 +8,8 @@
 
 #import "ViewController.h"
 #import "AppDelegate.h"
+#import <Accounts/Accounts.h>
+#import <Social/Social.h>
 
 @interface ViewController ()
 
@@ -42,11 +44,16 @@
     self.currentlyPlayingInfoLabel.clipsToBounds = YES;
     self.currentlyPlayingParentView.clipsToBounds = YES;
     
+    self.thumbsUpButton.enabled = NO;
+    
+    /*
     // Dummy data
     NSDictionary *dictionary = [NSDictionary dictionaryWithObjectsAndKeys:@"test", @"artist", @"test-track", @"track-title",nil];
     NSData *data = [NSKeyedArchiver archivedDataWithRootObject:dictionary];
     [self displayCurrentlyPlayingTrackWithData:data];
+     */
     
+
     [appDelegate setGuidelegate:self];
 }
 
@@ -117,6 +124,7 @@
 
 -(void) displayCurrentlyPlayingTrackWithData:(NSData*) data
 {
+    self.thumbsUpButton.enabled = YES;
     NSDictionary *unarchDictionary = (NSDictionary*) [NSKeyedUnarchiver unarchiveObjectWithData:data];
     self.currentlyPlayingArtistLabel.text = [unarchDictionary objectForKey:@"artist"];
     self.currentlyPlayingTrackTitleLabel.text = [unarchDictionary objectForKey:@"track-title"];
@@ -132,7 +140,7 @@
                                            
     __block CGRect rect = self.currentlyPlayingInfoLabel.frame;
     
-    [UIView animateWithDuration:15.0 delay:0.0 options:UIViewAnimationOptionCurveEaseInOut animations:^{
+    [UIView animateWithDuration:20.0 delay:0.0 options:UIViewAnimationOptionCurveEaseInOut animations:^{
         [UIView setAnimationBeginsFromCurrentState:YES];
         [UIView setAnimationRepeatCount:3];
         rect.origin.x = -1 * (self.currentlyPlayingInfoLabel.frame.origin.x + self.currentlyPlayingInfoLabel.frame.size.width+ 10);
@@ -156,5 +164,12 @@
     */
     
 }
+
+
+- (IBAction)thumbsUpSelection:(id)sender{
+    AppDelegate *appDelegate = (AppDelegate*)[UIApplication sharedApplication].delegate;
+    [appDelegate sendSelectedTrackToConnectedPeers];
+}
+
 
 @end

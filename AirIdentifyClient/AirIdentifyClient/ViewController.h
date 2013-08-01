@@ -8,6 +8,7 @@
 
 #import <UIKit/UIKit.h>
 #import "GUIDelegate.h"
+#import <Accounts/Accounts.h>
 
 @interface ViewController : UIViewController<GUIDelegate>
 
@@ -23,6 +24,7 @@
 @property (strong, nonatomic) IBOutlet UILabel *currentlyPlayingArtistLabel;
 @property (strong, nonatomic) IBOutlet UILabel *currentlyPlayingTrackTitleLabel;
 @property (strong, nonatomic) IBOutlet UIView *currentlyPlayingParentView;
+@property (strong, nonatomic) IBOutlet UIBarButtonItem *thumbsUpButton;
 
 @property (strong, nonatomic) IBOutlet UILabel *currentlyPlayingInfoLabel;
 
@@ -30,5 +32,7 @@
 - (IBAction)skipToNextItem:(id)sender;
 - (IBAction)skipToPreviousItem:(id)sender;
 - (IBAction)play:(id)sender;
+
+- (IBAction)thumbsUpSelection:(id)sender;
 
 @end

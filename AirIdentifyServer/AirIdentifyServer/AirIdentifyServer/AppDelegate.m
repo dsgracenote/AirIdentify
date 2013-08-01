@@ -203,6 +203,10 @@
     }
 }
 
+- (void) sendUpdateToPeers:(NSDictionary*)resultsDict {
+    
+}
+
 -(void) sendSearchResultToConnectedPeers:(GNSearchResult*) result
 {
     NSError *error = nil;

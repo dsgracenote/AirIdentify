@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		E7E59B5C17AAFED800B97333 /* Social.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E7E59B5B17AAFED800B97333 /* Social.framework */; };
+		E7E59B5E17AAFEE600B97333 /* Accounts.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E7E59B5D17AAFEE600B97333 /* Accounts.framework */; };
 		F625B69717A8774700EE9001 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F625B69617A8774700EE9001 /* Foundation.framework */; };
 		F625B69B17A8774700EE9001 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F625B69A17A8774700EE9001 /* UIKit.framework */; };
 		F625B6A117A8774700EE9001 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = F625B69F17A8774700EE9001 /* InfoPlist.strings */; };
@@ -45,6 +47,8 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		E7E59B5B17AAFED800B97333 /* Social.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Social.framework; path = System/Library/Frameworks/Social.framework; sourceTree = SDKROOT; };
+		E7E59B5D17AAFEE600B97333 /* Accounts.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Accounts.framework; path = System/Library/Frameworks/Accounts.framework; sourceTree = SDKROOT; };
 		F625B69317A8774700EE9001 /* AirClient.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = AirClient.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		F625B69617A8774700EE9001 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		F625B69A17A8774700EE9001 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
@@ -85,6 +89,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				E7E59B5E17AAFEE600B97333 /* Accounts.framework in Frameworks */,
+				E7E59B5C17AAFED800B97333 /* Social.framework in Frameworks */,
 				F625B6DA17A8BD3200EE9001 /* GracenoteMusicID.framework in Frameworks */,
 				F625B6FA17A8DAE800EE9001 /* CoreFoundation.framework in Frameworks */,
 				F625B6EE17A8D9A800EE9001 /* libsqlite3.dylib in Frameworks */,
@@ -134,6 +140,8 @@
 		F625B69517A8774700EE9001 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				E7E59B5D17AAFEE600B97333 /* Accounts.framework */,
+				E7E59B5B17AAFED800B97333 /* Social.framework */,
 				F625B6F917A8DAE800EE9001 /* CoreFoundation.framework */,
 				F625B6ED17A8D9A800EE9001 /* libsqlite3.dylib */,
 				F625B6EB17A8D99400EE9001 /* libz.dylib */,
@@ -452,7 +460,7 @@
 				INFOPLIST_FILE = "AirIdentifyClient/AirIdentifyClient-Info.plist";
 				OTHER_LDFLAGS = "-lstdc++";
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "D15D2B31-788A-431E-8686-0734F10E88D8";
+				PROVISIONING_PROFILE = "48B240EC-ACC1-476D-8826-A3833FB112DC";
 				WRAPPER_EXTENSION = app;
 			};
 			name = Debug;
@@ -473,7 +481,7 @@
 				INFOPLIST_FILE = "AirIdentifyClient/AirIdentifyClient-Info.plist";
 				OTHER_LDFLAGS = "-lstdc++";
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "D15D2B31-788A-431E-8686-0734F10E88D8";
+				PROVISIONING_PROFILE = "48B240EC-ACC1-476D-8826-A3833FB112DC";
 				WRAPPER_EXTENSION = app;
 			};
 			name = Release;

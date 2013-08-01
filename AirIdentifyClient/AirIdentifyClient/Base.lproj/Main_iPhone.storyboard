@@ -98,7 +98,11 @@
                                         <rect key="frame" x="0.0" y="22" width="57" height="44"/>
                                         <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
                                         <items>
-                                            <barButtonItem title="Item" id="j5a-Et-m0d"/>
+                                            <barButtonItem title="Item" id="j5a-Et-m0d">
+                                                <connections>
+                                                    <action selector="thumbsUpSelection:" destination="vXZ-lx-hvc" id="zz3-Z7-Voh"/>
+                                                </connections>
+                                            </barButtonItem>
                                         </items>
                                     </toolbar>
                                     <view hidden="YES" contentMode="scaleToFill" id="Tz6-WK-Bi7" userLabel=" View-What's playing">
@@ -161,6 +165,7 @@
                         <outlet property="currentlyPlayingTrackTitleLabel" destination="dxQ-V0-yY3" id="Z29-QT-eEZ"/>
                         <outlet property="imageView" destination="dOP-TF-IkG" id="I3L-Iz-Zvv"/>
                         <outlet property="playButton" destination="tIp-ac-Pee" id="HtJ-ux-wef"/>
+                        <outlet property="thumbsUpButton" destination="j5a-Et-m0d" id="XnL-fc-TaT"/>
                         <outlet property="trackTitleLabel" destination="VfJ-p7-5If" id="Yf9-0y-iTL"/>
                         <outlet property="volumeBarView" destination="qDf-Em-rXM" id="lBD-7W-8No"/>
                         <outlet property="volumeView" destination="7IF-Mf-J6s" id="SX0-0Z-XhL"/>
