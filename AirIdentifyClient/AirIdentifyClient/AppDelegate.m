@@ -33,6 +33,9 @@
 @property (strong, nonatomic) AudioFileSearchResult *audioFileSearchResult;
 
 @property (strong, nonatomic) FingerprintSearchResult *fingerprintSearchResult;
+
+@property (strong, nonatomic) GNSearchResponse *recentlyIdentifiedTrackResponse;
+
 @end
 
 @implementation AppDelegate
@@ -40,6 +43,7 @@
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
     // Override point for customization after application launch.
+    
     [application setIdleTimerDisabled:YES];
     
     self.audioFileSearchResult = [[AudioFileSearchResult alloc] init];
@@ -243,9 +247,10 @@
 -(void)fingerprintSearchResultReceived:(GNSearchResult*) fingerprintSearchResult
 {
     // Now that we have this, transmit it to our connected peer through MultipeerNetworking.
-        GNSearchResponse *response = fingerprintSearchResult.bestResponse;
-        
-        
+    GNSearchResponse *response = fingerprintSearchResult.bestResponse;
+    
+    self.recentlyIdentifiedTrackResponse = response;
+    
     NSDictionary *infoDict = @{@"track-title":[response trackTitle], @"album-title":response.albumTitle, @"track-duration":response.trackDuration, @"artist":response.artist, @"coverart-url":(response.coverArt && response.coverArt.data)?[response.coverArt data]:[NSNull null]};
     
         NSData *archivedData = [NSKeyedArchiver archivedDataWithRootObject:infoDict];
@@ -395,6 +400,149 @@
     NSData *data = [NSKeyedArchiver archivedDataWithRootObject:resultsDictionary];
     
     [self.mcsession sendData:data toPeers:[self.mcsession connectedPeers] withMode:MCSessionSendDataReliable error:&error];
+}
+
+-(void) searchCurrentlyIdentifiedTrackOnYouTube
+{
+    
+    
+}
+
+-(void) fetchPopularVideosFromYouTube:(BOOL) continueFromLastFetch
+{
+    NSString *queryString = [NSString stringWithFormat:@"%@ %@",self.recentlyIdentifiedTrackResponse.trackTitle, self.recentlyIdentifiedTrackResponse.artist ];
+    
+    NSDictionary *parameters = [NSDictionary dictionaryWithObjectsAndKeys:queryString,@"q",@"json", @"alt", [NSNumber numberWithInteger:5] ,@"max-results", [NSNumber numberWithInteger:2],@"v",nil];
+    
+    NSURLRequest *fetchRequest = [self generateFetchRequestFromURL:@"https://gdata.youtube.com/feeds/api/videos" parameters:parameters];
+    
+    
+    [NSURLConnection sendAsynchronousRequest:fetchRequest queue:[NSOperationQueue mainQueue] completionHandler: (^(NSURLResponse* response, NSData* data, NSError*error)
+    {
+                                                                                                                     
+        NSError *jsonError;
+        NSDictionary *popularVideosData = [NSJSONSerialization JSONObjectWithData:data options:NSJSONReadingAllowFragments error:&jsonError];
+        if(popularVideosData)
+        {
+            NSArray *entries = [popularVideosData valueForKeyPath:@"feed.entry"];
+            
+            [self parseYouTubeVideoSearchData:entries];
+            
+            NSLog(@"Result: %@", entries);
+         }
+         else
+         {
+          // Our JSON deserialization went awry
+          NSLog(@"JSON Error: %@", [jsonError localizedDescription]);
+         }
+      }
+    )];
+}
+
+-(NSURLRequest*) generateFetchRequestFromURL:(NSString*) URLString parameters:(NSDictionary*) params
+{
+    NSMutableString* string = [NSMutableString stringWithString:[NSString stringWithFormat:@"%@?", URLString ] ];
+    NSUInteger count = 1;
+    
+    for(NSString *key in params)
+    {
+        id value = [params objectForKey:key];
+        NSString *stringValue = nil;
+        if([value isKindOfClass:[NSNumber class]])
+        {
+            stringValue = [((NSNumber*)value) stringValue];
+        }
+        else if([value isKindOfClass:[NSString class]])
+        {
+            stringValue = value;
+        }
+        
+        if(count==1)
+        {
+            [string appendString: [NSString stringWithFormat:@"%@=%@",key, stringValue]];
+        }
+        else
+        {
+            [string appendString: [NSString stringWithFormat:@"&%@=%@",key, stringValue]];
+        }
+        
+        count++;
+    }
+    
+    NSURLRequest *fetchRequest =  [[NSURLRequest alloc] initWithURL:[NSURL URLWithString:string]];
+    
+    return fetchRequest;
+}
+
+#pragma mark - Youtube Parsing API's 
+
+-(void) parseYouTubeVideoSearchData:(id) inData
+{
+
+    if(!inData)
+        return;
+    
+    NSArray *arrayData = nil;
+    if([inData isKindOfClass:[NSArray class]])
+    {
+        arrayData = inData;
+    }
+    else
+    {
+        return;
+    }
+    
+    NSUInteger count = 1;
+    for(NSDictionary* data in arrayData)
+    {
+        ++count;
+        
+        for (NSString *key in data)
+        {
+            id value = [data objectForKey:key];
+            
+            if([key isEqualToString:@"id"])
+            {
+                if([value isKindOfClass:[NSDictionary class] ])
+                {
+                    NSDictionary *dictValue = value;
+                    NSString *idValue = [dictValue objectForKey:@"$t"];
+                    
+                }
+            }
+            else if([key isEqualToString:@"title"])
+            {
+                if([value isKindOfClass:[NSDictionary class] ])
+                {
+                    NSDictionary *dictValue = value;
+                    NSString *titleValue = [dictValue objectForKey:@"$t"];
+                }
+            }
+            else if([key isEqualToString:@"media$group"])
+            {
+                for(NSString *key in value)
+                {
+                    id propertyValue = [data objectForKey:key];
+                    
+                    if([key isEqualToString:@"media$player"])
+                    {
+                        if([propertyValue isKindOfClass:[NSDictionary class]])
+                        {
+                            NSString *strURL = [propertyValue objectForKey:@"url"];
+                            
+                            [self performSelectorOnMainThread:@selector(startPlayingVideoURL:) withObject:strURL waitUntilDone:NO];
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+
+
+-(void) startPlayingVideoURL:(NSString*) URLString
+{
+    
 }
 
 #pragma mark - MCNearbyServiceBrowser Delegate Methods
