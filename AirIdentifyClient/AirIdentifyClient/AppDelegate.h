@@ -74,7 +74,7 @@ typedef enum
 
 -(void)fileSearchResultReceived:(GNSearchResult*) fileSearchResult;
 -(void)fingerprintSearchResultReceived:(GNSearchResult*) fingerprintSearchResult;
--(void)sendSelectedTrackToConnectedPeers;
+-(void)sendSelectedTrackToConnectedPeers:(BOOL)positiveFeedback;
 -(BOOL)userHasAccessToTwitter;
 
 @end
