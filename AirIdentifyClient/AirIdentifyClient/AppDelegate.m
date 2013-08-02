@@ -16,6 +16,8 @@
 #import <Social/Social.h>
 #import <Accounts/Accounts.h>
 
+#import "MediaPlayer/MPMoviePlayerController.h"
+
 @interface AppDelegate()
 
 @property (strong, nonatomic) NSMutableDictionary *regionsAlreadyEntered;
@@ -36,6 +38,8 @@
 
 @property (strong, nonatomic) GNSearchResponse *recentlyIdentifiedTrackResponse;
 
+@property (strong) MPMoviePlayerController* moviePlayerController;
+
 @end
 
 @implementation AppDelegate
@@ -43,6 +47,8 @@
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
     // Override point for customization after application launch.
+    
+    self.moviePlayerController = [[MPMoviePlayerController alloc] init];
     
     [application setIdleTimerDisabled:YES];
     
@@ -507,7 +513,7 @@
                 {
                     NSDictionary *dictValue = value;
                     NSString *idValue = [dictValue objectForKey:@"$t"];
-                    
+                    NSLog(@"idValue = %@", idValue);
                 }
             }
             else if([key isEqualToString:@"title"])
@@ -516,6 +522,7 @@
                 {
                     NSDictionary *dictValue = value;
                     NSString *titleValue = [dictValue objectForKey:@"$t"];
+                    NSLog(@"titleValue = %@", titleValue);
                 }
             }
             else if([key isEqualToString:@"media$group"])
@@ -670,5 +677,137 @@
     
 }
 
+
+#pragma mark - Miscellaneous Methods
+
+-(NSString *)unescapeString:(NSString *)string
+{
+    // will cause trouble if you have "abc\\\\uvw"
+    // \u   --->    \U
+    NSString *esc1 = [string stringByReplacingOccurrencesOfString:@"\\u" withString:@"\\U"];
+    
+    // "    --->    \"
+    NSString *esc2 = [esc1 stringByReplacingOccurrencesOfString:@"\"" withString:@"\\\""];
+    
+    // \\"  --->    \"
+    NSString *esc3 = [esc2 stringByReplacingOccurrencesOfString:@"\\\\\"" withString:@"\\\""];
+    
+    NSString *quoted = [[@"\"" stringByAppendingString:esc3] stringByAppendingString:@"\""];
+    NSData *data = [quoted dataUsingEncoding:NSUTF8StringEncoding];
+    
+    //  NSPropertyListFormat format = 0;
+    //  NSString *errorDescr = nil;
+    NSString *unesc = [NSPropertyListSerialization propertyListFromData:data mutabilityOption:NSPropertyListImmutable format:NULL errorDescription:NULL];
+    
+    if ([unesc isKindOfClass:[NSString class]]) {
+        // \U   --->    \u
+        return [unesc stringByReplacingOccurrencesOfString:@"\\U" withString:@"\\u"];
+    }
+    
+    return nil;
+}
+
+-(void) loadContentFromIdURLString:(NSString*) idURLString
+{
+    NSMutableURLRequest *request = [[NSMutableURLRequest alloc] initWithURL:[NSURL URLWithString:idURLString]];
+    [request setValue:(NSString *)kUserAgent forHTTPHeaderField:@"User-Agent"];
+    
+    [NSURLConnection sendAsynchronousRequest:request queue:[NSOperationQueue mainQueue] completionHandler:(^(NSURLResponse* response, NSData *data, NSError* error)
+      {
+        __block NSString *htmlString = [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
+        NSString *JSONStart = nil;
+        NSString *JSONStartFull = @"ls.setItem('PIGGYBACK_DATA', \")]}'";
+        NSString *JSONStartShrunk = [JSONStartFull stringByReplacingOccurrencesOfString:@" " withString:@""];
+        if ([htmlString rangeOfString:JSONStartFull].location != NSNotFound)
+        {
+           JSONStart = JSONStartFull;
+        }
+        else if ([htmlString rangeOfString:JSONStartShrunk].location != NSNotFound)
+        {
+         JSONStart = JSONStartShrunk;
+        }
+        if (JSONStart != nil)
+        {
+           NSScanner* scanner = [NSScanner scannerWithString:htmlString];
+           [scanner scanUpToString:JSONStart intoString:nil];
+               [scanner scanString:JSONStart intoString:nil];
+            
+           NSString *JSON = nil;
+           [scanner scanUpToString:@"\");" intoString:&JSON];
+           JSON = [self unescapeString:JSON];
+           NSError* decodingError = nil;
+           NSDictionary* JSONCode = nil;
+           
+           JSONCode = [NSJSONSerialization JSONObjectWithData:[JSON dataUsingEncoding:NSUTF8StringEncoding] options:NSJSONReadingAllowFragments error:&decodingError];
+           
+           if (decodingError)
+           {
+               error = decodingError;
+           }
+           else
+           {
+               NSArray* videos = [[[JSONCode objectForKey:@"content"] objectForKey:@"video"] objectForKey:@"fmt_stream_map"];
+               NSString* streamURL = nil;
+               if (videos.count)
+               {
+                   NSUInteger maxQuality = YouTubeVideoQualitySmall;
+                   for(NSDictionary* dict in videos)
+                   {
+                       id quality = [dict objectForKey:@"quality"];
+                       NSNumber *videoQuality = nil;
+                       if([quality isKindOfClass:[NSString class]])
+                           videoQuality = [NSNumber numberWithInteger:[quality integerValue]];
+                       else
+                           videoQuality = quality;
+                       
+                       if(videoQuality.integerValue>maxQuality)
+                       {
+                           maxQuality = videoQuality.integerValue;
+                           streamURL = [dict objectForKey:@"url"];
+                       }
+                       else if(streamURL==nil)
+                       {
+                           streamURL = [dict objectForKey:@"url"];
+                       }
+                       
+                   }
+                   
+               }
+               
+               if (streamURL)
+               {
+                   [self performSelectorOnMainThread:@selector(startPlaybackWithStreamURL:) withObject:streamURL waitUntilDone:YES ];
+               }
+               else
+               {
+                   error = [NSError errorWithDomain:@"YouTubePlayerExtractorErrorDomain" code:2 userInfo:[NSDictionary dictionaryWithObject:@"Couldn't find the stream URL." forKey:NSLocalizedDescriptionKey]];
+               }
+           }
+       }
+       else
+       {
+           error = [NSError errorWithDomain:@"YouTubePlayerExtractorErrorDomain" code:3 userInfo:[NSDictionary dictionaryWithObject:@"The JSON data could not be found." forKey:NSLocalizedDescriptionKey]];
+       }
+       
+       
+   })];
+    
+}
+
+
+-(void) startPlaybackWithStreamURL:(NSString*) streamURLString
+{
+    NSString *escapedStr = [streamURLString stringByReplacingPercentEscapesUsingEncoding:NSUTF8StringEncoding ];
+    [self.moviePlayerController setContentURL:[NSURL URLWithString:escapedStr]];
+    [self.moviePlayerController prepareToPlay];
+    //[self.moviePlayerController setFullscreen:YES animated:NO];
+    [NSURLConnection sendAsynchronousRequest:[NSURLRequest requestWithURL:[NSURL URLWithString:escapedStr]] queue:[NSOperationQueue mainQueue] completionHandler:  ^(NSURLResponse *response, NSData *data, NSError* error){
+        
+        NSLog(@"Got data with length %ld", (unsigned long)data.length);
+        
+    }];
+    
+    [self.moviePlayerController play];
+}
 
 @end
