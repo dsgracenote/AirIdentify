@@ -17,5 +17,6 @@
 @dynamic trackID;
 @dynamic albumName;
 @dynamic trackhistory;
+@dynamic infoAddedDate;
 
 @end

@@ -73,11 +73,13 @@
 		F65B91A917A76F0800B59799 /* AirIdentifyServerTests-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "AirIdentifyServerTests-Info.plist"; sourceTree = "<group>"; };
 		F65B91AB17A76F0800B59799 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		F65B91AD17A76F0800B59799 /* AirIdentifyServerTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AirIdentifyServerTests.m; sourceTree = "<group>"; };
+		F6A7F65817AB796A005313F5 /* Model.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = Model.xcdatamodel; sourceTree = "<group>"; };
+		F6A7F65917AB7B42005313F5 /* Model2.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = file; path = Model2.xcdatamodel; sourceTree = "<group>"; };
 		F6B7B56B17AA346D00279FD0 /* FingerprintSearchResult.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = FingerprintSearchResult.m; path = ../../../FingerprintSearchResult.m; sourceTree = "<group>"; };
 		F6B7B56C17AA346D00279FD0 /* FingerprintSearchResult.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = FingerprintSearchResult.h; path = ../../../FingerprintSearchResult.h; sourceTree = "<group>"; };
 		F6B7B56D17AA346D00279FD0 /* AudioFileSearchResult.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = AudioFileSearchResult.m; path = ../../../AudioFileSearchResult.m; sourceTree = "<group>"; };
 		F6B7B56E17AA346D00279FD0 /* AudioFileSearchResult.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AudioFileSearchResult.h; path = ../../../AudioFileSearchResult.h; sourceTree = "<group>"; };
-		F6B7B57217AADB4A00279FD0 /* Model.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = Model.xcdatamodel; sourceTree = "<group>"; };
+		F6B7B57217AADB4A00279FD0 /* Model 1.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "Model 1.xcdatamodel"; sourceTree = "<group>"; };
 		F6B7B57417AAE23300279FD0 /* TrackHistory.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = TrackHistory.h; path = AirIdentifyServer/TrackHistory.h; sourceTree = "<group>"; };
 		F6B7B57517AAE23300279FD0 /* TrackHistory.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = TrackHistory.m; path = AirIdentifyServer/TrackHistory.m; sourceTree = "<group>"; };
 		F6B7B57717AAE23300279FD0 /* TrackInfo.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = TrackInfo.h; path = AirIdentifyServer/TrackInfo.h; sourceTree = "<group>"; };
@@ -579,9 +581,11 @@
 		F6B7B57117AADB4A00279FD0 /* Model.xcdatamodeld */ = {
 			isa = XCVersionGroup;
 			children = (
-				F6B7B57217AADB4A00279FD0 /* Model.xcdatamodel */,
+				F6A7F65817AB796A005313F5 /* Model.xcdatamodel */,
+				F6A7F65917AB7B42005313F5 /* Model2.xcdatamodel */,
+				F6B7B57217AADB4A00279FD0 /* Model 1.xcdatamodel */,
 			);
-			currentVersion = F6B7B57217AADB4A00279FD0 /* Model.xcdatamodel */;
+			currentVersion = F6A7F65917AB7B42005313F5 /* Model2.xcdatamodel */;
 			path = Model.xcdatamodeld;
 			sourceTree = "<group>";
 			versionGroupType = wrapper.xcdatamodel;

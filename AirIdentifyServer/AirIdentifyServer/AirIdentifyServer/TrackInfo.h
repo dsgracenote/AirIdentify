@@ -18,6 +18,8 @@
 @property (nonatomic, retain) NSString * trackID;
 @property (nonatomic, retain) NSString * albumName;
 @property (nonatomic, retain) NSSet *trackhistory;
+@property (nonatomic, retain) NSDate* infoAddedDate;
+
 @end
 
 @interface TrackInfo (CoreDataGeneratedAccessors)

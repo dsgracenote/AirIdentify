@@ -12,7 +12,6 @@
 
 @interface TrackHistory : NSManagedObject
 
-@property (nonatomic, retain) NSDate * historyDate;
 @property (nonatomic, retain) NSString * device;
 @property (nonatomic, retain) NSSet *trackinfo;
 @property (nonatomic, retain) NSSet *user;

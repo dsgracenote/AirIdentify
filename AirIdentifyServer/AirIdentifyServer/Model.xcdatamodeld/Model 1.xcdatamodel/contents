@@ -2,13 +2,13 @@
 <model userDefinedModelVersionIdentifier="" type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="3389" systemVersion="12E55" minimumToolsVersion="Xcode 4.3" macOSVersion="Automatic" iOSVersion="Automatic">
     <entity name="TrackHistory" representedClassName="TrackHistory" syncable="YES">
         <attribute name="device" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="historyDate" optional="YES" attributeType="Date" syncable="YES"/>
         <relationship name="trackinfo" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="TrackInfo" inverseName="trackhistory" inverseEntity="TrackInfo" syncable="YES"/>
         <relationship name="user" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="User" inverseName="trackhistory" inverseEntity="User" syncable="YES"/>
     </entity>
     <entity name="TrackInfo" representedClassName="TrackInfo" syncable="YES">
         <attribute name="albumName" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="artistName" optional="YES" attributeType="String" syncable="YES"/>
-        <attribute name="infoAddedDate" optional="YES" attributeType="Date" syncable="YES"/>
         <attribute name="trackID" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="trackTitle" optional="YES" attributeType="String" syncable="YES"/>
         <relationship name="trackhistory" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="TrackHistory" inverseName="trackinfo" inverseEntity="TrackHistory" syncable="YES"/>
@@ -21,8 +21,8 @@
         <relationship name="trackhistory" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="TrackHistory" inverseName="user" inverseEntity="TrackHistory" syncable="YES"/>
     </entity>
     <elements>
-        <element name="TrackHistory" positionX="0" positionY="0" width="0" height="0"/>
-        <element name="TrackInfo" positionX="0" positionY="0" width="0" height="0"/>
-        <element name="User" positionX="0" positionY="0" width="0" height="0"/>
+        <element name="TrackInfo" positionX="-1053" positionY="-1188" width="128" height="118"/>
+        <element name="User" positionX="-1521" positionY="-1179" width="128" height="118"/>
+        <element name="TrackHistory" positionX="-1368" positionY="-916" width="128" height="103"/>
     </elements>
 </model>

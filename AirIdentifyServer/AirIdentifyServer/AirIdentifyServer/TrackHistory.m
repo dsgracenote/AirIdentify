@@ -11,7 +11,6 @@
 
 @implementation TrackHistory
 
-@dynamic historyDate;
 @dynamic device;
 @dynamic trackinfo;
 @dynamic user;
