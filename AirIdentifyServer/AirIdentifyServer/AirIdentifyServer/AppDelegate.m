@@ -29,6 +29,7 @@
 @property (strong, nonatomic) NSMutableDictionary *userInfoForTrackIDDict;
 
 @property (strong, nonatomic) NSMutableArray *peerIDsToSendRecommendations;
+@property (strong, nonatomic) NSMutableArray *userIDsReceivedInContext;
 
 @property (strong, nonatomic) GNRecognizeStream *recognizeStream;
 @property (strong, nonatomic) GNAudioSourceMic *audioSourceMic;
@@ -64,6 +65,7 @@
     self.connectedClients = [NSMutableDictionary dictionaryWithCapacity:10];
     self.userInfoForTrackIDDict = [NSMutableDictionary dictionaryWithCapacity:10];
     self.peerIDsToSendRecommendations = [NSMutableArray arrayWithCapacity:10];
+    self.userIDsReceivedInContext = [NSMutableArray arrayWithCapacity:10];
     
     self.audioFileSearchResult = [[AudioFileSearchResult alloc] init];
     self.fingerprintSearchResult = [[FingerprintSearchResult alloc] init];
@@ -172,9 +174,14 @@
     NSError *error = nil;
     
     
-        [self.mcsession sendData:archivedData toPeers:self.peerIDsToSendRecommendations withMode:MCSessionSendDataReliable error:&error];
-        
-        [self.peerIDsToSendRecommendations removeAllObjects];
+    [self.mcsession sendData:archivedData toPeers:self.peerIDsToSendRecommendations withMode:MCSessionSendDataReliable error:&error];
+    
+    NSLog(@"self.peerIDsToSendRecommendations = %@", self.peerIDsToSendRecommendations);
+    
+    if(error)
+    {
+        NSLog(@"Error sending recos = %@",error.localizedDescription);
+    }
     
 }
 
@@ -326,8 +333,10 @@
     if(context)
     {
         contextDictionary =  [NSKeyedUnarchiver unarchiveObjectWithData:context];
-        [self fetchHistoryForUser:[contextDictionary objectForKey:@"user-id"]];
-        [self.peerIDsToSendRecommendations addObject:peerID];
+        if(contextDictionary.count)
+           [self.userIDsReceivedInContext addObject:[contextDictionary objectForKey:@"user-id"]];
+        
+        [self.peerIDsToSendRecommendations removeAllObjects];
     }
 }
 
@@ -363,8 +372,12 @@
             
         }
         
-        NSArray *sortedKeys = [artistDict keysSortedByValueUsingComparator: ^(id obj1, id obj2)
+        NSArray *sortedKeys = nil;
+        
+        if(artistDict.count>1)
         {
+         sortedKeys = [artistDict keysSortedByValueUsingComparator: ^(id obj1, id obj2)
+         {
             
             if ([obj1 integerValue] > [obj2 integerValue]) {
                 return (NSComparisonResult)NSOrderedDescending;
@@ -374,11 +387,21 @@
                 return (NSComparisonResult)NSOrderedAscending;
             }
             return (NSComparisonResult)NSOrderedSame;
-        }];
+          }];
+        }
+        else
+        {
+            sortedKeys = [NSArray arrayWithObject:[[artistDict allKeys] objectAtIndex:0]];
+        }
         
-        NSString *mostListenedArtist = [sortedKeys objectAtIndex:0];
+        NSString *mostListenedArtist = nil;
         
-        [self fetchTracksForArtist:mostListenedArtist];
+        if(sortedKeys.count)
+        {
+            mostListenedArtist =  [sortedKeys objectAtIndex:0];
+            
+            [self fetchTracksForArtist:mostListenedArtist];
+        }
     }
 
 }
@@ -422,6 +445,11 @@
             UILocalNotification *alert = [[UILocalNotification alloc] init];
             alert.alertBody = [NSString stringWithFormat:@"Connected to peer - %@", peerID.displayName ];
             [[UIApplication sharedApplication] presentLocalNotificationNow:alert];
+            
+            for(NSString *userID in self.userIDsReceivedInContext)
+                [self fetchHistoryForUser:userID];
+            
+            [self.peerIDsToSendRecommendations addObject:peerID];
             
             [self identifyCurrentPlayingAudioOniBeacon];
         }
