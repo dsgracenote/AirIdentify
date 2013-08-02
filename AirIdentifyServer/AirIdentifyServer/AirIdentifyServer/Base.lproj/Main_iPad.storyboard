@@ -97,7 +97,7 @@
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
                     </view>
-                    <tabBarItem key="tabBarItem" title="Player" image="quicktour_scan_button_icon_ipad" id="acW-dT-cKf"/>
+                    <tabBarItem key="tabBarItem" title="Player" image="Live_Dashboard_Music~iphone" id="acW-dT-cKf"/>
                     <connections>
                         <outlet property="artistNameLabel" destination="aaD-NH-9Dj" id="AGK-VZ-Myu"/>
                         <outlet property="imageView" destination="44B-93-M0r" id="x8D-Ly-4Ep"/>
@@ -210,10 +210,10 @@
         </scene>
     </scenes>
     <resources>
+        <image name="Live_Dashboard_Music~iphone" width="31" height="31"/>
         <image name="btn_next_ipad" width="26.5" height="15.5"/>
         <image name="btn_play_ipad" width="28" height="24"/>
         <image name="btn_prev_ipad" width="26.5" height="15.5"/>
-        <image name="quicktour_scan_button_icon_ipad" width="35" height="37"/>
         <image name="tabbar_settings" width="26" height="26"/>
     </resources>
     <simulatedMetricsContainer key="defaultSimulatedMetrics">

@@ -400,7 +400,24 @@
 -(void) sendSearchResultToConnectedPeers:(GNSearchResult*) result
 {
     NSError *error = nil;
-    NSDictionary *resultsDictionary = @{@"fingerprint":result.fingerprintData, @"peerName":[UIDevice currentDevice].name};
+    GNSearchResponse* bestResponse = [result bestResponse];
+    
+    NSMutableDictionary *resultsDictionary = [[NSMutableDictionary alloc] init];
+    if (self.currentlyPlayingTrackID != nil) {
+        [resultsDictionary setObject:bestResponse.trackId forKey:@"track-id"];
+    }
+    
+    if (self.twitterAccount != nil) {
+        if (self.twitterAccount.identifier != nil) {
+            [resultsDictionary setObject:self.twitterAccount.identifier forKey:@"user-id"];
+        }
+        
+        
+        if (self.twitterAccount.username != nil) {
+            [resultsDictionary setObject:self.twitterAccount.username forKey:@"user-name"];
+        }
+    }
+    
     NSData *data = [NSKeyedArchiver archivedDataWithRootObject:resultsDictionary];
     
     [self.mcsession sendData:data toPeers:[self.mcsession connectedPeers] withMode:MCSessionSendDataReliable error:&error];

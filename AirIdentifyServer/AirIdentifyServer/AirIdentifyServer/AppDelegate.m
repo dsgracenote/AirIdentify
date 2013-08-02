@@ -390,9 +390,11 @@
     alert.alertBody = [NSString stringWithFormat:@"Received data from peer - %@", peerID.displayName ];
     [[UIApplication sharedApplication] presentLocalNotificationNow:alert];
     
-    [self.userInfoForTrackIDDict setObject:userInfoDictionary forKey:trackID];
-    
-    [self identifyAudioPlayingOnClientDeviceFromTrackId:trackID];
+    if(trackID)
+    {
+     [self.userInfoForTrackIDDict setObject:userInfoDictionary forKey:trackID];
+     [self identifyAudioPlayingOnClientDeviceFromTrackId:trackID];
+    }
     
     NSLog(@"Received data %@", userInfoDictionary);
       

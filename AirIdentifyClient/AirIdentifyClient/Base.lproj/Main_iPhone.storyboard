@@ -12,23 +12,37 @@
                         <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <subviews>
+                            <view hidden="YES" contentMode="scaleToFill" id="7Kz-6p-12F" userLabel="View-History View">
+                                <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <subviews>
+                                    <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" rowHeight="44" sectionHeaderHeight="22" sectionFooterHeight="22" id="MyZ-VW-RXI">
+                                        <rect key="frame" x="0.0" y="23" width="320" height="545"/>
+                                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                                        <connections>
+                                            <outlet property="dataSource" destination="vXZ-lx-hvc" id="6O5-U9-fsi"/>
+                                            <outlet property="delegate" destination="vXZ-lx-hvc" id="aPz-ku-7on"/>
+                                        </connections>
+                                    </tableView>
+                                </subviews>
+                            </view>
                             <view contentMode="scaleToFill" id="Qtp-cf-mH2">
-                                <rect key="frame" x="0.0" y="0.0" width="319" height="567"/>
+                                <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <subviews>
                                     <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" id="dOP-TF-IkG">
-                                        <rect key="frame" x="-1" y="66" width="320" height="320"/>
+                                        <rect key="frame" x="-1" y="66" width="321" height="321"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMinX="YES" widthSizable="YES" flexibleMaxX="YES" heightSizable="YES" flexibleMaxY="YES"/>
                                     </imageView>
                                     <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="VfJ-p7-5If" userLabel="Label - trackTitle">
-                                        <rect key="frame" x="0.0" y="480" width="318" height="44"/>
+                                        <rect key="frame" x="0.0" y="481" width="319" height="44"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMinX="YES" widthSizable="YES" flexibleMaxX="YES" flexibleMinY="YES" flexibleMaxY="YES"/>
                                         <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                         <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
                                         <nil key="highlightedColor"/>
                                     </label>
                                     <view opaque="NO" contentMode="scaleToFill" id="7IF-Mf-J6s">
-                                        <rect key="frame" x="-1" y="386" width="320" height="95"/>
+                                        <rect key="frame" x="-1" y="386" width="321" height="95"/>
                                         <autoresizingMask key="autoresizingMask" widthSizable="YES"/>
                                         <subviews>
                                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="tIp-ac-Pee">
@@ -88,7 +102,7 @@
                                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                     </view>
                                     <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="top" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="yf6-Tw-QmH" userLabel="Label-Artist">
-                                        <rect key="frame" x="0.0" y="522" width="318" height="44"/>
+                                        <rect key="frame" x="0.0" y="523" width="319" height="44"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMinX="YES" widthSizable="YES" flexibleMaxX="YES" flexibleMinY="YES" flexibleMaxY="YES"/>
                                         <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                         <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
@@ -124,11 +138,11 @@
                                         </subviews>
                                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
                                     </view>
-                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="dsK-Ki-R4m">
-                                        <rect key="frame" x="0.0" y="23" width="27" height="44"/>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="dsK-Ki-R4m">
+                                        <rect key="frame" x="242" y="32" width="37" height="25"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                         <fontDescription key="fontDescription" type="system" pointSize="15"/>
-                                        <state key="normal" title="Y">
+                                        <state key="normal" image="thumbs_up">
                                             <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                                         </state>
                                         <connections>
@@ -136,7 +150,7 @@
                                         </connections>
                                     </button>
                                     <view contentMode="scaleToFill" id="uvz-4Z-Ia3" userLabel="View - CurrentPlayingParentView">
-                                        <rect key="frame" x="47" y="23" width="264" height="44"/>
+                                        <rect key="frame" x="43" y="23" width="196" height="44"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                         <subviews>
                                             <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="XWH-i8-Qwn" userLabel="Label - Currently Playing">
@@ -151,13 +165,24 @@
                                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                         <color key="tintColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                     </view>
-                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="z46-YV-9aw">
-                                        <rect key="frame" x="25" y="23" width="22" height="44"/>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="z46-YV-9aw">
+                                        <rect key="frame" x="275" y="32" width="38" height="25"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                         <fontDescription key="fontDescription" type="system" pointSize="15"/>
-                                        <state key="normal" title="N">
+                                        <state key="normal" image="thumbs_down">
                                             <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                                         </state>
+                                    </button>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="xp4-kT-t9p" userLabel="Button-List View">
+                                        <rect key="frame" x="6" y="31" width="32" height="26"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                        <fontDescription key="fontDescription" type="system" pointSize="15"/>
+                                        <state key="normal" image="custom_playlist_icon">
+                                            <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                                        </state>
+                                        <connections>
+                                            <action selector="showListView:" destination="vXZ-lx-hvc" eventType="touchUpInside" id="LA9-HM-jak"/>
+                                        </connections>
                                     </button>
                                 </subviews>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
@@ -174,7 +199,10 @@
                         <outlet property="currentlyPlayingInfoLabel" destination="XWH-i8-Qwn" id="hkV-Sl-rS2"/>
                         <outlet property="currentlyPlayingParentView" destination="uvz-4Z-Ia3" id="gxa-3T-IYI"/>
                         <outlet property="currentlyPlayingTrackTitleLabel" destination="dxQ-V0-yY3" id="Z29-QT-eEZ"/>
+                        <outlet property="historyTableView" destination="MyZ-VW-RXI" id="0mI-dH-nxG"/>
+                        <outlet property="historyView" destination="7Kz-6p-12F" id="Yur-XD-mNX"/>
                         <outlet property="imageView" destination="dOP-TF-IkG" id="I3L-Iz-Zvv"/>
+                        <outlet property="mainPlayerView" destination="Qtp-cf-mH2" id="eaw-hl-wMm"/>
                         <outlet property="playButton" destination="tIp-ac-Pee" id="HtJ-ux-wef"/>
                         <outlet property="thumbsDownButton" destination="z46-YV-9aw" id="QNR-Te-AhW"/>
                         <outlet property="thumbsUpButton" destination="dsK-Ki-R4m" id="mxe-dh-bak"/>
@@ -190,9 +218,12 @@
         </scene>
     </scenes>
     <resources>
+        <image name="custom_playlist_icon" width="26" height="26"/>
         <image name="player_bt_ff" width="32.5" height="27"/>
         <image name="player_bt_play" width="26" height="29"/>
         <image name="player_bt_rev" width="33" height="27"/>
+        <image name="thumbs_down" width="27" height="25"/>
+        <image name="thumbs_up" width="27" height="25"/>
     </resources>
     <simulatedMetricsContainer key="defaultSimulatedMetrics">
         <simulatedStatusBarMetrics key="statusBar"/>

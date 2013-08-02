@@ -143,20 +143,23 @@
     CGSize expectedLabelSize = [self.currentlyPlayingInfoLabel.text sizeWithFont:self.currentlyPlayingInfoLabel.font
                                                                constrainedToSize:self.currentlyPlayingInfoLabel.frame.size
                                                                    lineBreakMode:self.currentlyPlayingInfoLabel.lineBreakMode];
-    __block CGRect rect = CGRectMake(self.currentlyPlayingInfoLabel.frame.origin.x, self.currentlyPlayingInfoLabel.frame.origin.y, expectedLabelSize.width, expectedLabelSize.height);
+    __block CGRect rect = CGRectMake(72, 23, expectedLabelSize.width, expectedLabelSize.height);
     self.currentlyPlayingInfoLabel.frame = rect;
     
     self.thumbsDownButton.hidden = NO;
     self.thumbsUpButton.hidden = NO;
     
-    [UIView animateWithDuration:15.0 delay:0.0 options:UIViewAnimationOptionCurveEaseIn animations:^{
+    [UIView animateWithDuration:10.0 delay:0.0 options:UIViewAnimationOptionCurveEaseIn animations:^{
         [UIView setAnimationBeginsFromCurrentState:YES];
         [UIView setAnimationRepeatCount:3];
-        rect.origin.x = -1 * (self.currentlyPlayingInfoLabel.frame.size.width);
+        rect.origin.x = -1 * (self.currentlyPlayingInfoLabel.frame.size.width/2);
         self.currentlyPlayingInfoLabel.frame = rect;
     } completion:^(BOOL finished){
-        self.thumbsUpButton.hidden = YES;
-        self.thumbsDownButton.hidden = YES;
+        if(finished)
+        {
+         self.thumbsUpButton.hidden = YES;
+         self.thumbsDownButton.hidden = YES;
+        }
     }];
     
     /*
@@ -183,9 +186,87 @@
     [appDelegate sendSelectedTrackToConnectedPeers:YES];
 }
 
+- (IBAction)showListView:(id)sender
+{
+    __block CGRect mainrect = self.mainPlayerView.frame;
+    
+    if(self.historyView.hidden)
+    {
+    
+      self.historyView.alpha = 0.0;
+      self.historyView.hidden = NO;
+        
+        [UIView animateWithDuration:0.7 animations:
+          ^{
+            mainrect.origin.x+=mainrect.size.width/1.5;
+            self.mainPlayerView.frame = mainrect;
+            self.historyView.alpha = 0.8;
+        
+        
+          } completion:^(BOOL finished){self.historyView.alpha = 1.0; self.mainPlayerView.tintAdjustmentMode=UIViewTintAdjustmentModeDimmed;}];
+        
+    }
+    else
+    {
+        [UIView animateWithDuration:0.7 animations:
+         ^{
+             mainrect.origin.x=0;
+             self.mainPlayerView.frame = mainrect;
+             self.historyView.alpha = 0.0;
+         } completion:^(BOOL finished){self.historyView.hidden=YES;self.mainPlayerView.tintAdjustmentMode=UIViewTintAdjustmentModeNormal;}];
+
+    }
+    
+    
+}
+
 - (IBAction)thumbsDownSelection:(id)sender{
     AppDelegate *appDelegate = (AppDelegate*)[UIApplication sharedApplication].delegate;
     [appDelegate sendSelectedTrackToConnectedPeers:NO];
 }
+
+
+#pragma mark Table View Datasource methods
+
+- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
+{
+    if(section==0)
+       return 10;
+    
+    return 5;
+}
+
+- (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
+{
+    return 2;
+}
+
+-(NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section
+{
+    if(section==1)
+        return @"Local History";
+    
+    return @"Recommendations";
+}
+
+// Row display. Implementers should *always* try to reuse cells by setting each cell's reuseIdentifier and querying for available reusable cells with dequeueReusableCellWithIdentifier:
+// Cell gets various attributes set automatically based on table (separators) and data source (accessory views, editing controls)
+
+- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    static NSString* cellIdentifier = @"CellIdentifier";
+    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:cellIdentifier];
+    
+    if(!cell)
+    {
+        cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:cellIdentifier];
+    }
+    
+    cell.textLabel.text = @"Track Title";
+    cell.detailTextLabel.text = @"Artist";
+    
+    return cell;
+}
+
 
 @end
