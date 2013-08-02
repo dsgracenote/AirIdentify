@@ -199,24 +199,55 @@
       self.historyView.alpha = 0.0;
       self.historyView.hidden = NO;
         
-        [UIView animateWithDuration:0.7 animations:
+        [UIView animateWithDuration:0.5 animations:
           ^{
             mainrect.origin.x+=mainrect.size.width/1.5;
             self.mainPlayerView.frame = mainrect;
             self.historyView.alpha = 0.8;
         
         
-          } completion:^(BOOL finished){self.historyView.alpha = 1.0; self.mainPlayerView.tintAdjustmentMode=UIViewTintAdjustmentModeDimmed;}];
+          } completion:^(BOOL finished){
+          
+              if(finished)
+              {
+                  [UIView setAnimationBeginsFromCurrentState:YES];
+                  [UIView setAnimationCurve:UIViewAnimationCurveEaseInOut];
+                  //Animate table view.
+                  CAKeyframeAnimation * anim = [ CAKeyframeAnimation animationWithKeyPath:@"transform" ] ;
+                  anim.values = [ NSArray arrayWithObjects:
+                                  [ NSValue valueWithCATransform3D:CATransform3DMakeTranslation(10.0f, 0.0f, 0.0f) ],
+                                 [ NSValue valueWithCATransform3D:CATransform3DMakeTranslation(-5.0f, 0.0f, 0.0f) ],
+                                 [ NSValue valueWithCATransform3D:CATransform3DMakeTranslation(0.0f, 0.0f, 0.0f) ],
+                                 nil ] ;
+                  anim.autoreverses = NO ;
+                  anim.repeatCount = 0.0f ;
+                  anim.duration = 0.5f ;
+                  
+                  [self.mainPlayerView.layer addAnimation:anim forKey:@"back-forth"];
+                  
+                self.historyView.alpha = 1.0; self.mainPlayerView.tintAdjustmentMode=UIViewTintAdjustmentModeDimmed;
+              }
+          
+          
+          }];
         
     }
     else
     {
-        [UIView animateWithDuration:0.7 animations:
+        [UIView animateWithDuration:0.5 animations:
          ^{
              mainrect.origin.x=0;
              self.mainPlayerView.frame = mainrect;
              self.historyView.alpha = 0.0;
-         } completion:^(BOOL finished){self.historyView.hidden=YES;self.mainPlayerView.tintAdjustmentMode=UIViewTintAdjustmentModeNormal;}];
+         } completion:^(BOOL finished){
+             
+             if(finished)
+             {
+              self.historyView.hidden=YES;
+              self.mainPlayerView.tintAdjustmentMode=UIViewTintAdjustmentModeNormal;
+             }
+         
+         }];
 
     }
     
