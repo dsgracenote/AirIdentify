@@ -72,7 +72,7 @@ typedef enum
 
 @property (strong, nonatomic)          ACAccountStore *accountStore;
 @property (strong, nonatomic)          ACAccount      *twitterAccount;
-@property (strong, nonatomic)          NSMutableDictionary *cachedTracks;
+@property (strong, nonatomic)          NSMutableArray *cachedTracks;
 
 @property (strong) NSMutableArray *recommendationsArray;
 

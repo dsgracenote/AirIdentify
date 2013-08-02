@@ -81,6 +81,7 @@
     self.connectedPeers = [NSMutableDictionary dictionaryWithCapacity:2];
     
     self.accountStore = [[ACAccountStore alloc] init];
+    self.cachedTracks = [[NSMutableArray alloc] initWithCapacity:5];
     
     if ([self userHasAccessToTwitter])
     {
@@ -275,7 +276,16 @@
             [self.cachedTracks setObject:[NSNull null] forKey:self.currentlyPlayingTrackID];
         }
     
+        BOOL displayTrackInfo = YES;
+        for (NSDictionary *trackDict in self.cachedTracks) {
+            if ([[trackDict objectForKey:@"track-id"] compare:fingerprintSearchResult.bestResponse.trackId  options:NSCaseInsensitiveSearch] == NSOrderedSame && [[trackDict objectForKey:@"feedback"] boolValue] == NO) {
+                displayTrackInfo = NO;
+            }
+        }
     
+        if (displayTrackInfo) {
+            [self.guidelegate displayCurrentlyPlayingTrackWithData:archivedData];
+        }
 }
 
 #pragma mark - File Search Result Received
@@ -408,7 +418,7 @@
     GNSearchResponse* bestResponse = [result bestResponse];
     
     NSMutableDictionary *resultsDictionary = [[NSMutableDictionary alloc] init];
-    if (self.currentlyPlayingTrackID != nil) {
+    if ([self.currentlyPlayingTrack objectForKey:@"track-id"] != nil) {
         [resultsDictionary setObject:bestResponse.trackId forKey:@"track-id"];
     }
     
@@ -432,8 +442,8 @@
     NSError *error = nil;
     
     NSMutableDictionary *resultsDictionary = [[NSMutableDictionary alloc] init];
-    if (self.currentlyPlayingTrackID != nil) {
-        [resultsDictionary setObject:self.currentlyPlayingTrackID forKey:@"track-id"];
+    if ([self.currentlyPlayingTrack objectForKey:@"track-id"] != nil) {
+        [resultsDictionary setObject:[self.currentlyPlayingTrack objectForKey:@"track-id"] forKey:@"track-id"];
     }
     
     if (self.twitterAccount != nil) {
@@ -451,7 +461,19 @@
     
     NSData *data = [NSKeyedArchiver archivedDataWithRootObject:resultsDictionary];
     
-    [self.cachedTracks setObject:[NSNumber numberWithBool:YES] forKey:self.currentlyPlayingTrackID];
+    
+    BOOL addTrack = YES;
+    for (NSDictionary *track in self.cachedTracks) {
+        if ([[self.currentlyPlayingTrack objectForKey:@"track-id"] compare:[track objectForKey:@"track-id"] options:NSCaseInsensitiveSearch] == NSOrderedSame) {
+            addTrack = NO;
+        }
+    }
+    
+    if (addTrack && positiveFeedback) {
+        [self.cachedTracks addObject:self.currentlyPlayingTrack];
+        [self.guidelegate reloadHistoryTableView];
+    }
+
     [self.mcsession sendData:data toPeers:[self.mcsession connectedPeers] withMode:MCSessionSendDataReliable error:&error];
 }
 

@@ -185,7 +185,7 @@
 
 -(void) reloadHistoryTableView
 {
-    [self.historyTableView reloadData];
+    [self.historyTableView performSelectorOnMainThread:@selector(reloadData) withObject:nil waitUntilDone:NO]; 
 }
 
 -(void) displayCurrentlyPlayingTrackWithData:(NSData*) data
@@ -218,7 +218,7 @@
     [UIView animateWithDuration:10.0 delay:0.0 options:UIViewAnimationOptionCurveEaseIn animations:^{
         [UIView setAnimationBeginsFromCurrentState:YES];
         [UIView setAnimationRepeatCount:3];
-        rect.origin.x = -1 * (self.currentlyPlayingInfoLabel.frame.size.width/2);
+        rect.origin.x = -1 * (self.currentlyPlayingInfoLabel.frame.size.width);
         self.currentlyPlayingInfoLabel.frame = rect;
     } completion:^(BOOL finished){
         if(finished)
@@ -332,6 +332,8 @@
     
     if(section==0) //Display Recommendations.
        return [appDelegate.recommendationsArray count];
+    else
+        return [appDelegate.cachedTracks count];
     
     return 5;
 }
@@ -374,6 +376,10 @@
         
         trackTitle = [recommendationDict objectForKey:@"track-title"];
         artist = [recommendationDict objectForKey:@"artist"];
+    } else {
+        NSDictionary *localTrackDict = [appDelegate.cachedTracks objectAtIndex:indexPath.row];
+        trackTitle = [localTrackDict objectForKey:@"track-title"];
+        artist = [localTrackDict objectForKey:@"artist"];
     }
     
     cell.textLabel.text = trackTitle;
