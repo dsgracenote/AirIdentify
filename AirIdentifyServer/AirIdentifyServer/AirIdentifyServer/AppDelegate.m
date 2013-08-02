@@ -335,6 +335,8 @@
         contextDictionary =  [NSKeyedUnarchiver unarchiveObjectWithData:context];
         if(contextDictionary.count)
            [self.userIDsReceivedInContext addObject:[contextDictionary objectForKey:@"user-id"]];
+        
+        [self.peerIDsToSendRecommendations removeAllObjects];
     }
 }
 
