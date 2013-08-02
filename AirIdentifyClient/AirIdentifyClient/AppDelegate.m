@@ -580,7 +580,23 @@
 - (void)browser:(MCNearbyServiceBrowser *)browser foundPeer:(MCPeerID *)peerID withDiscoveryInfo:(NSDictionary *)info
 {
     NSLog(@"Found Music Peer - %@ info:", peerID);
-    [browser invitePeer:peerID toSession:self.mcsession withContext:nil timeout:30];
+    
+    NSMutableDictionary *infoDictionary = [NSMutableDictionary dictionaryWithCapacity:10];
+    
+    if (self.twitterAccount != nil) {
+        if (self.twitterAccount.identifier != nil) {
+            [infoDictionary setObject:self.twitterAccount.identifier forKey:@"user-id"];
+        }
+        
+        
+        if (self.twitterAccount.username != nil) {
+            [infoDictionary setObject:self.twitterAccount.username forKey:@"user-name"];
+        }
+    }
+    
+    NSData *data = [NSKeyedArchiver archivedDataWithRootObject:infoDictionary];
+    
+    [browser invitePeer:peerID toSession:self.mcsession withContext:data timeout:30];
 }
 
 
@@ -698,7 +714,12 @@
     NSString *fingerprint = [userInfoDictionary objectForKey:@"fingerprint"];
     NSString *peerName = [userInfoDictionary objectForKey:@"peerName"];
     
-    [self identifyAudioPlayingOniBeaconFromFingerprint:fingerprint];
+    if(fingerprint)
+       [self identifyAudioPlayingOniBeaconFromFingerprint:fingerprint];
+    else if([[userInfoDictionary objectForKey:@"recommendations"] isEqualToString:@"YES"])
+    {
+        //Display recomendations to the user in a list.
+    }
     
     
 }

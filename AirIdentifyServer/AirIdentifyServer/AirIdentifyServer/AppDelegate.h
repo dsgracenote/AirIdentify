@@ -57,6 +57,7 @@ typedef enum
 -(void)fileSearchResultReceived:(GNSearchResult*) fileSearchResult;
 -(void)fingerprintSearchResultReceived:(GNSearchResult*) fingerprintSearchResult;
 -(void)trackidSearchResultReceived:(GNSearchResult*) trackidSearchResult;
+-(void)textSearchResultReceived:(GNSearchResult*) trackidSearchResult;
 
 //Core Data Properties.
 @property (readonly, strong, nonatomic) NSManagedObjectContext *managedObjectContext;

@@ -18,5 +18,6 @@
 @dynamic albumName;
 @dynamic trackhistory;
 @dynamic infoAddedDate;
+@dynamic iBeaconID;
 
 @end

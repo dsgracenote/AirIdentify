@@ -18,7 +18,8 @@
 @property (nonatomic, retain) NSString * trackID;
 @property (nonatomic, retain) NSString * albumName;
 @property (nonatomic, retain) NSSet *trackhistory;
-@property (nonatomic, retain) NSDate* infoAddedDate;
+@property (nonatomic, assign) NSTimeInterval infoAddedDate;
+@property (nonatomic, retain) NSString *iBeaconID;
 
 @end
 

@@ -9,7 +9,7 @@
         <attribute name="albumName" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="artistName" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="iBeaconID" optional="YES" attributeType="String" syncable="YES"/>
-        <attribute name="infoAddedDate" optional="YES" attributeType="Date" syncable="YES"/>
+        <attribute name="infoAddedDate" optional="YES" attributeType="Double" defaultValueString="0.0" syncable="YES"/>
         <attribute name="trackID" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="trackTitle" optional="YES" attributeType="String" syncable="YES"/>
         <relationship name="trackhistory" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="TrackHistory" inverseName="trackinfo" inverseEntity="TrackHistory" syncable="YES"/>

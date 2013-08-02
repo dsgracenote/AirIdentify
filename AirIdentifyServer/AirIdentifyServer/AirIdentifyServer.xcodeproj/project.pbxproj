@@ -26,6 +26,7 @@
 		F65B91A417A76F0800B59799 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F65B918017A76F0700B59799 /* UIKit.framework */; };
 		F65B91AC17A76F0800B59799 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = F65B91AA17A76F0800B59799 /* InfoPlist.strings */; };
 		F65B91AE17A76F0800B59799 /* AirIdentifyServerTests.m in Sources */ = {isa = PBXBuildFile; fileRef = F65B91AD17A76F0800B59799 /* AirIdentifyServerTests.m */; };
+		F6A7F66017AB9755005313F5 /* TextSearchResult.m in Sources */ = {isa = PBXBuildFile; fileRef = F6A7F65E17AB9755005313F5 /* TextSearchResult.m */; };
 		F6B7B56F17AA346D00279FD0 /* FingerprintSearchResult.m in Sources */ = {isa = PBXBuildFile; fileRef = F6B7B56B17AA346D00279FD0 /* FingerprintSearchResult.m */; };
 		F6B7B57017AA346D00279FD0 /* AudioFileSearchResult.m in Sources */ = {isa = PBXBuildFile; fileRef = F6B7B56D17AA346D00279FD0 /* AudioFileSearchResult.m */; };
 		F6B7B57317AADB4A00279FD0 /* Model.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = F6B7B57117AADB4A00279FD0 /* Model.xcdatamodeld */; };
@@ -75,6 +76,10 @@
 		F65B91AD17A76F0800B59799 /* AirIdentifyServerTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AirIdentifyServerTests.m; sourceTree = "<group>"; };
 		F6A7F65817AB796A005313F5 /* Model.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = Model.xcdatamodel; sourceTree = "<group>"; };
 		F6A7F65917AB7B42005313F5 /* Model2.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = file; path = Model2.xcdatamodel; sourceTree = "<group>"; };
+		F6A7F65A17AB8698005313F5 /* Model3.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = file; path = Model3.xcdatamodel; sourceTree = "<group>"; };
+		F6A7F65E17AB9755005313F5 /* TextSearchResult.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = TextSearchResult.m; path = ../../../TextSearchResult.m; sourceTree = "<group>"; };
+		F6A7F65F17AB9755005313F5 /* TextSearchResult.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = TextSearchResult.h; path = ../../../TextSearchResult.h; sourceTree = "<group>"; };
+		F6A7F66117ABA029005313F5 /* Model4.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = file; path = Model4.xcdatamodel; sourceTree = "<group>"; };
 		F6B7B56B17AA346D00279FD0 /* FingerprintSearchResult.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = FingerprintSearchResult.m; path = ../../../FingerprintSearchResult.m; sourceTree = "<group>"; };
 		F6B7B56C17AA346D00279FD0 /* FingerprintSearchResult.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = FingerprintSearchResult.h; path = ../../../FingerprintSearchResult.h; sourceTree = "<group>"; };
 		F6B7B56D17AA346D00279FD0 /* AudioFileSearchResult.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = AudioFileSearchResult.m; path = ../../../AudioFileSearchResult.m; sourceTree = "<group>"; };
@@ -161,6 +166,8 @@
 		F65B918217A76F0700B59799 /* AirIdentifyServer */ = {
 			isa = PBXGroup;
 			children = (
+				F6A7F65E17AB9755005313F5 /* TextSearchResult.m */,
+				F6A7F65F17AB9755005313F5 /* TextSearchResult.h */,
 				F6B7B58317AAECA600279FD0 /* TrackIDSearchResult.h */,
 				F6B7B58417AAECA600279FD0 /* TrackIDSearchResult.m */,
 				F6B7B56B17AA346D00279FD0 /* FingerprintSearchResult.m */,
@@ -336,6 +343,7 @@
 				F6B7B57917AAE23300279FD0 /* TrackInfo.m in Sources */,
 				F65B918D17A76F0700B59799 /* AppDelegate.m in Sources */,
 				F65B919617A76F0800B59799 /* FirstViewController.m in Sources */,
+				F6A7F66017AB9755005313F5 /* TextSearchResult.m in Sources */,
 				F6B7B57317AADB4A00279FD0 /* Model.xcdatamodeld in Sources */,
 				F65B918917A76F0700B59799 /* main.m in Sources */,
 				F6B7B56F17AA346D00279FD0 /* FingerprintSearchResult.m in Sources */,
@@ -583,9 +591,11 @@
 			children = (
 				F6A7F65817AB796A005313F5 /* Model.xcdatamodel */,
 				F6A7F65917AB7B42005313F5 /* Model2.xcdatamodel */,
+				F6A7F65A17AB8698005313F5 /* Model3.xcdatamodel */,
+				F6A7F66117ABA029005313F5 /* Model4.xcdatamodel */,
 				F6B7B57217AADB4A00279FD0 /* Model 1.xcdatamodel */,
 			);
-			currentVersion = F6A7F65917AB7B42005313F5 /* Model2.xcdatamodel */;
+			currentVersion = F6A7F66117ABA029005313F5 /* Model4.xcdatamodel */;
 			path = Model.xcdatamodeld;
 			sourceTree = "<group>";
 			versionGroupType = wrapper.xcdatamodel;

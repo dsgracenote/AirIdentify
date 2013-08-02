@@ -9,6 +9,7 @@
 #import "AppDelegate.h"
 #import "AudioFileSearchResult.h"
 #import "FingerprintSearchResult.h"
+#import "TextSearchResult.h"
 #import "TrackIDSearchResult.h"
 
 #import <GracenoteMusicID/GNSearchResponse.h>
@@ -27,11 +28,15 @@
 
 @property (strong, nonatomic) NSMutableDictionary *userInfoForTrackIDDict;
 
+@property (strong, nonatomic) NSMutableArray *peerIDsToSendRecommendations;
+
 @property (strong, nonatomic) GNRecognizeStream *recognizeStream;
 @property (strong, nonatomic) GNAudioSourceMic *audioSourceMic;
 
 @property (strong, nonatomic) AudioFileSearchResult *audioFileSearchResult;
 @property (strong, nonatomic) FingerprintSearchResult *fingerprintSearchResult;
+@property (strong, nonatomic) TextSearchResult *textSearchResult;
+
 @property(strong, nonatomic) TrackIDSearchResult *trackIDSearchResult;
 
 @end
@@ -58,10 +63,12 @@
     
     self.connectedClients = [NSMutableDictionary dictionaryWithCapacity:10];
     self.userInfoForTrackIDDict = [NSMutableDictionary dictionaryWithCapacity:10];
+    self.peerIDsToSendRecommendations = [NSMutableArray arrayWithCapacity:10];
     
     self.audioFileSearchResult = [[AudioFileSearchResult alloc] init];
-     self.fingerprintSearchResult = [[FingerprintSearchResult alloc] init];
+    self.fingerprintSearchResult = [[FingerprintSearchResult alloc] init];
     self.trackIDSearchResult = [[TrackIDSearchResult alloc] init];
+    self.textSearchResult = [[TextSearchResult alloc] init];
 
     return YES;
 }
@@ -110,13 +117,52 @@
     {
         GNSearchResponse *response = fingerprintSearchResult.bestResponse;
         
-        
         NSDictionary *infoDict = @{@"track-title":[response trackTitle], @"album-title":response.albumTitle, @"track-duration":response.trackDuration, @"artist":response.artist, @"coverart-url":[response.coverArt url]};
         
         NSData *archivedData = [NSKeyedArchiver archivedDataWithRootObject:infoDict];
         
         NSLog(@"archivedData = %@", archivedData);
     }
+    
+}
+
+#pragma mark - Text Search Result Received
+
+-(void)textSearchResultReceived:(GNSearchResult*) textSearchResult
+{
+    GNSearchResponse *response = textSearchResult.bestResponse;
+    id coverArtData = [response.coverArt data];
+    if(!coverArtData)
+        coverArtData = [NSNull null];
+    
+    id trackDuration = [NSNull null];
+    id albumTitle = [NSNull null];
+    id trackTitle = [NSNull null];
+    id artist = [NSNull null];
+    
+    if(response.trackDuration)
+        trackDuration = response.trackDuration;
+    
+    if(response.albumTitle)
+        albumTitle = response.albumTitle;
+    
+    if(response.trackTitle)
+        trackTitle = response.trackTitle;
+    
+    if(response.artist)
+        artist = response.artist;
+        
+    
+    NSDictionary *infoDict = @{@"recommendations":@"YES", @"track-title":trackTitle, @"album-title":albumTitle, @"track-duration":trackDuration, @"artist":artist, @"coverart-url":coverArtData};
+    
+    NSData *archivedData = [NSKeyedArchiver archivedDataWithRootObject:infoDict];
+    
+    NSError *error = nil;
+    
+    
+        [self.mcsession sendData:archivedData toPeers:self.peerIDsToSendRecommendations withMode:MCSessionSendDataReliable error:&error];
+        
+        [self.peerIDsToSendRecommendations removeAllObjects];
     
 }
 
@@ -262,6 +308,73 @@
     [[UIApplication sharedApplication] presentLocalNotificationNow:alert];
     
     invitationHandler(YES, self.mcsession);
+    
+    NSDictionary *contextDictionary = nil;
+    
+    if(context)
+    {
+        contextDictionary =  [NSKeyedUnarchiver unarchiveObjectWithData:context];
+        [self fetchHistoryForUser:[contextDictionary objectForKey:@"user-id"]];
+        [self.peerIDsToSendRecommendations addObject:peerID];
+    }
+}
+
+-(void) fetchHistoryForUser:(NSString*) userID
+{
+    NSEntityDescription *entity = [NSEntityDescription entityForName:@"User" inManagedObjectContext:self.managedObjectContext];
+    NSFetchRequest* fetchRequest = [[NSFetchRequest alloc] init];
+    [fetchRequest setEntity:entity];
+    [fetchRequest setFetchBatchSize:25];
+    
+    fetchRequest.predicate = [NSPredicate predicateWithFormat:@"userID==%@", userID];
+    
+    fetchRequest.sortDescriptors = @[[NSSortDescriptor sortDescriptorWithKey:@"userID" ascending:YES]];
+    
+    NSFetchedResultsController *fetchedResultsController = [[NSFetchedResultsController alloc] initWithFetchRequest:fetchRequest managedObjectContext:self.managedObjectContext sectionNameKeyPath:nil cacheName:nil];
+    
+    [fetchedResultsController performFetch:nil];
+    
+    if([fetchedResultsController fetchedObjects].count)
+    {
+        User *user = [[fetchedResultsController fetchedObjects] lastObject];
+        NSSet *trackInfo = user.trackhistory.trackinfo;
+        NSArray *trackInfoArray = [trackInfo allObjects];
+        trackInfoArray = [trackInfoArray filteredArrayUsingPredicate:[NSPredicate predicateWithFormat:@"infoAddedDate<=%lf AND iBeaconID==%@",[NSDate date].timeIntervalSince1970, self.peerID.displayName]];
+        
+        NSMutableDictionary *artistDict = [NSMutableDictionary dictionaryWithCapacity:10];
+        for(TrackInfo* trackinfoObj in trackInfoArray)
+        {
+            NSNumber *artistFrequency = [artistDict objectForKey:trackinfoObj.artistName];
+            
+            [artistDict setObject:artistFrequency?[NSNumber numberWithInteger:artistFrequency.integerValue+1]:[NSNumber numberWithInteger:1] forKey:trackinfoObj.artistName];
+            
+            
+        }
+        
+        NSArray *sortedKeys = [artistDict keysSortedByValueUsingComparator: ^(id obj1, id obj2)
+        {
+            
+            if ([obj1 integerValue] > [obj2 integerValue]) {
+                return (NSComparisonResult)NSOrderedDescending;
+            }
+            
+            if ([obj1 integerValue] < [obj2 integerValue]) {
+                return (NSComparisonResult)NSOrderedAscending;
+            }
+            return (NSComparisonResult)NSOrderedSame;
+        }];
+        
+        NSString *mostListenedArtist = [sortedKeys objectAtIndex:0];
+        
+        [self fetchTracksForArtist:mostListenedArtist];
+    }
+
+}
+
+-(void) fetchTracksForArtist:(NSString*)artist
+{
+    GNConfig *config = [GNConfig init:CLIENTID];
+    [GNOperations searchByText:self.textSearchResult config:config artist:artist albumTitle:nil trackTitle:nil];
 }
 
 #pragma mark - MCSession Delegate Methods
@@ -348,6 +461,7 @@
             trackInfoObject.trackTitle = bestResponse.trackTitle;
             trackInfoObject.albumName = bestResponse.albumTitle;
             trackInfoObject.artistName = bestResponse.artist;
+            trackInfoObject.infoAddedDate = [NSDate date].timeIntervalSince1970;
             
             NSMutableSet *mutableSet = [NSMutableSet setWithSet:user.trackhistory.trackinfo];
             [mutableSet addObject:trackInfoObject];
@@ -374,6 +488,7 @@
         trackInfoObject.trackTitle = bestResponse.trackTitle;
         trackInfoObject.albumName = bestResponse.albumTitle;
         trackInfoObject.artistName = bestResponse.artist;
+        trackInfoObject.iBeaconID = self.peerID.displayName;
         
         NSMutableSet *mutableSet = [NSMutableSet setWithSet:user.trackhistory.trackinfo];
         [mutableSet addObject:trackInfoObject];
