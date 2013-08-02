@@ -406,7 +406,7 @@
     [self.mcsession sendData:data toPeers:[self.mcsession connectedPeers] withMode:MCSessionSendDataReliable error:&error];
 }
 
-- (void)sendSelectedTrackToConnectedPeers {
+- (void)sendSelectedTrackToConnectedPeers:(BOOL)positiveFeedback {
     NSError *error = nil;
     
     NSMutableDictionary *resultsDictionary = [[NSMutableDictionary alloc] init];
@@ -424,6 +424,8 @@
             [resultsDictionary setObject:self.twitterAccount.username forKey:@"user-name"];
         }
     }
+    
+    [resultsDictionary setObject:[NSNumber numberWithBool:positiveFeedback] forKey:@"feedback"];
     
     NSData *data = [NSKeyedArchiver archivedDataWithRootObject:resultsDictionary];
     

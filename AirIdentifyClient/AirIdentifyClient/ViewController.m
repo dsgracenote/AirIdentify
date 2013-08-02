@@ -180,12 +180,12 @@
 
 - (IBAction)thumbsUpSelection:(id)sender{
     AppDelegate *appDelegate = (AppDelegate*)[UIApplication sharedApplication].delegate;
-    [appDelegate sendSelectedTrackToConnectedPeers];
+    [appDelegate sendSelectedTrackToConnectedPeers:YES];
 }
 
 - (IBAction)thumbsDownSelection:(id)sender{
- //   AppDelegate *appDelegate = (AppDelegate*)[UIApplication sharedApplication].delegate;
-//    [appDelegate sendSelectedTrackToConnectedPeers];
+    AppDelegate *appDelegate = (AppDelegate*)[UIApplication sharedApplication].delegate;
+    [appDelegate sendSelectedTrackToConnectedPeers:NO];
 }
 
 @end
