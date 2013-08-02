@@ -797,6 +797,8 @@
 
 -(void) startPlaybackWithStreamURL:(NSString*) streamURLString
 {
+    [self.musicPlayerController stop];
+    
     NSString *escapedStr = [streamURLString stringByReplacingPercentEscapesUsingEncoding:NSUTF8StringEncoding ];
     [self.moviePlayerController setContentURL:[NSURL URLWithString:escapedStr]];
     [self.moviePlayerController prepareToPlay];
