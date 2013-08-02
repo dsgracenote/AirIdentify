@@ -331,6 +331,8 @@
     
     NSFetchedResultsController *fetchedResultsController = [[NSFetchedResultsController alloc] initWithFetchRequest:fetchRequest managedObjectContext:self.managedObjectContext sectionNameKeyPath:nil cacheName:nil];
     
+    [fetchedResultsController performFetch:nil];
+    
     if([fetchedResultsController fetchedObjects].count)
     {
        User *user = [[fetchedResultsController fetchedObjects] lastObject];
