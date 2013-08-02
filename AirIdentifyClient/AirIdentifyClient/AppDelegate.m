@@ -741,7 +741,7 @@
     {
         //Display recomendations to the user in a list. Parse all responses and add those to current recos.
         NSData *archivedData = [userInfoDictionary objectForKey:@"data"];
-        NSArray *recos = [NSKeyedUnarchiver unarchiveObjectWithData:data];
+        NSArray *recos = [NSKeyedUnarchiver unarchiveObjectWithData:archivedData];
         BOOL dataAdded = NO;
         for(NSData* archivedRecoDict in recos)
         {
