@@ -13,5 +13,6 @@
 @required
 
 -(void) displayCurrentlyPlayingTrackWithData:(NSData*) data;
+-(void) reloadHistoryTableView;
 
 @end

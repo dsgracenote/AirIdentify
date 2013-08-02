@@ -130,32 +130,44 @@
 
 -(void)textSearchResultReceived:(GNSearchResult*) textSearchResult
 {
-    GNSearchResponse *response = textSearchResult.bestResponse;
-    id coverArtData = [response.coverArt data];
-    if(!coverArtData)
-        coverArtData = [NSNull null];
+    NSMutableArray *recos = [NSMutableArray arrayWithCapacity:10];
     
-    id trackDuration = [NSNull null];
-    id albumTitle = [NSNull null];
-    id trackTitle = [NSNull null];
-    id artist = [NSNull null];
+    NSArray *responses = textSearchResult.responses;
+    for(GNSearchResponse *response in responses)
+    {
     
-    if(response.trackDuration)
-        trackDuration = response.trackDuration;
-    
-    if(response.albumTitle)
-        albumTitle = response.albumTitle;
-    
-    if(response.trackTitle)
-        trackTitle = response.trackTitle;
-    
-    if(response.artist)
-        artist = response.artist;
+        id coverArtData = [response.coverArt data];
+        if(!coverArtData)
+            coverArtData = [NSNull null];
         
-    
-    NSDictionary *infoDict = @{@"recommendations":@"YES", @"track-title":trackTitle, @"album-title":albumTitle, @"track-duration":trackDuration, @"artist":artist, @"coverart-url":coverArtData};
-    
-    NSData *archivedData = [NSKeyedArchiver archivedDataWithRootObject:infoDict];
+        id trackDuration = [NSNull null];
+        id albumTitle = [NSNull null];
+        id trackTitle = [NSNull null];
+        id artist = [NSNull null];
+        
+        if(response.trackDuration)
+            trackDuration = response.trackDuration;
+        
+        if(response.albumTitle)
+            albumTitle = response.albumTitle;
+        
+        if(response.trackTitle)
+            trackTitle = response.trackTitle;
+        
+        if(response.artist)
+            artist = response.artist;
+            
+        
+        NSDictionary *infoDict = @{@"track-title":trackTitle, @"album-title":albumTitle, @"track-duration":trackDuration, @"artist":artist, @"coverart-url":coverArtData};
+        
+        NSData *archivedData = [NSKeyedArchiver archivedDataWithRootObject:infoDict];
+        
+        [recos addObject:archivedData];
+    }
+
+    NSData *archivedArray = [NSKeyedArchiver archivedDataWithRootObject:recos];
+    NSDictionary *dictionaryToSend = @{@"recommendations":@"YES", @"data":archivedArray };
+    NSData *archivedData = [NSKeyedArchiver archivedDataWithRootObject:dictionaryToSend];
     
     NSError *error = nil;
     

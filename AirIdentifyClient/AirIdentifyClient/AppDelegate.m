@@ -40,6 +40,7 @@
 
 @property (strong) MPMoviePlayerController* moviePlayerController;
 
+
 @end
 
 @implementation AppDelegate
@@ -49,6 +50,7 @@
     // Override point for customization after application launch.
     
     self.moviePlayerController = [[MPMoviePlayerController alloc] init];
+    self.recommendationsArray = [NSMutableArray arrayWithCapacity:10];
     
     [application setIdleTimerDisabled:YES];
     
@@ -737,7 +739,19 @@
        [self identifyAudioPlayingOniBeaconFromFingerprint:fingerprint];
     else if([[userInfoDictionary objectForKey:@"recommendations"] isEqualToString:@"YES"])
     {
-        //Display recomendations to the user in a list.
+        //Display recomendations to the user in a list. Parse all responses and add those to current recos.
+        NSData *archivedData = [userInfoDictionary objectForKey:@"data"];
+        NSArray *recos = [NSKeyedUnarchiver unarchiveObjectWithData:data];
+        BOOL dataAdded = NO;
+        for(NSData* archivedRecoDict in recos)
+        {
+            dataAdded = YES;
+            NSDictionary *recoDict = [NSKeyedUnarchiver unarchiveObjectWithData:archivedRecoDict];
+            [self.recommendationsArray addObject:recoDict];
+        }
+        
+        if(dataAdded)
+            [self.guidelegate reloadHistoryTableView];
     }
     
     

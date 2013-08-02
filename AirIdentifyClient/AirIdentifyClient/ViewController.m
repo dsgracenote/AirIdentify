@@ -121,7 +121,10 @@
 
 #pragma mark - GUIDelegate Methods
 
-
+-(void) reloadHistoryTableView
+{
+    [self.historyTableView reloadData];
+}
 
 -(void) displayCurrentlyPlayingTrackWithData:(NSData*) data
 {
@@ -230,8 +233,10 @@
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-    if(section==0)
-       return 10;
+    AppDelegate *appDelegate = (AppDelegate*)[UIApplication sharedApplication].delegate;
+    
+    if(section==0) //Display Recommendations.
+       return [appDelegate.recommendationsArray count];
     
     return 5;
 }
@@ -243,6 +248,7 @@
 
 -(NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section
 {
+    
     if(section==1)
         return @"Local History";
     
@@ -256,14 +262,27 @@
 {
     static NSString* cellIdentifier = @"CellIdentifier";
     UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:cellIdentifier];
+    AppDelegate *appDelegate = (AppDelegate*)[UIApplication sharedApplication].delegate;
     
     if(!cell)
     {
         cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:cellIdentifier];
     }
     
-    cell.textLabel.text = @"Track Title";
-    cell.detailTextLabel.text = @"Artist";
+    NSString *trackTitle = @"<Track Title>";
+    NSString *artist = @"<Artist>";
+    
+    if(indexPath.section==0)
+    { //It is THE Recos.
+        
+       NSDictionary *recommendationDict = [appDelegate.recommendationsArray objectAtIndex:indexPath.row];
+        
+        trackTitle = [recommendationDict objectForKey:@"track-title"];
+        artist = [recommendationDict objectForKey:@"artist"];
+    }
+    
+    cell.textLabel.text = trackTitle;
+    cell.detailTextLabel.text = artist;
     
     return cell;
 }
