@@ -44,14 +44,15 @@
     self.currentlyPlayingInfoLabel.clipsToBounds = YES;
     self.currentlyPlayingParentView.clipsToBounds = YES;
     
-    self.thumbsUpButton.enabled = NO;
+    self.thumbsUpButton.hidden = YES;
+    self.thumbsDownButton.hidden = YES;
     
     /*
     // Dummy data
     NSDictionary *dictionary = [NSDictionary dictionaryWithObjectsAndKeys:@"test", @"artist", @"test-track", @"track-title",nil];
     NSData *data = [NSKeyedArchiver archivedDataWithRootObject:dictionary];
     [self displayCurrentlyPlayingTrackWithData:data];
-     */
+    */
     
 
     [appDelegate setGuidelegate:self];
@@ -137,15 +138,26 @@
     }
     
     self.currentlyPlayingInfoLabel.text = [NSString stringWithFormat:@"%@/%@", [unarchDictionary objectForKey:@"track-title"], [unarchDictionary objectForKey:@"artist"]];
-                                           
-    __block CGRect rect = self.currentlyPlayingInfoLabel.frame;
     
-    [UIView animateWithDuration:20.0 delay:0.0 options:UIViewAnimationOptionCurveEaseInOut animations:^{
+    
+    CGSize expectedLabelSize = [self.currentlyPlayingInfoLabel.text sizeWithFont:self.currentlyPlayingInfoLabel.font
+                                                               constrainedToSize:self.currentlyPlayingInfoLabel.frame.size
+                                                                   lineBreakMode:self.currentlyPlayingInfoLabel.lineBreakMode];
+    __block CGRect rect = CGRectMake(self.currentlyPlayingInfoLabel.frame.origin.x, self.currentlyPlayingInfoLabel.frame.origin.y, expectedLabelSize.width, expectedLabelSize.height);
+    self.currentlyPlayingInfoLabel.frame = rect;
+    
+    self.thumbsDownButton.hidden = NO;
+    self.thumbsUpButton.hidden = NO;
+    
+    [UIView animateWithDuration:15.0 delay:0.0 options:UIViewAnimationOptionCurveEaseIn animations:^{
         [UIView setAnimationBeginsFromCurrentState:YES];
         [UIView setAnimationRepeatCount:3];
-        rect.origin.x = -1 * (self.currentlyPlayingInfoLabel.frame.origin.x + self.currentlyPlayingInfoLabel.frame.size.width+ 10);
+        rect.origin.x = -1 * (self.currentlyPlayingInfoLabel.frame.size.width);
         self.currentlyPlayingInfoLabel.frame = rect;
-    } completion:nil];
+    } completion:^(BOOL finished){
+        self.thumbsUpButton.hidden = YES;
+        self.thumbsDownButton.hidden = YES;
+    }];
     
     /*
     __block CGRect rect = self.whatsPlayingView.frame;
@@ -171,5 +183,9 @@
     [appDelegate sendSelectedTrackToConnectedPeers];
 }
 
+- (IBAction)thumbsDownSelection:(id)sender{
+ //   AppDelegate *appDelegate = (AppDelegate*)[UIApplication sharedApplication].delegate;
+//    [appDelegate sendSelectedTrackToConnectedPeers];
+}
 
 @end

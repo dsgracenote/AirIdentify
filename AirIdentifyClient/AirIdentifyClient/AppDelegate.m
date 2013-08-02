@@ -262,8 +262,14 @@
         NSData *archivedData = [NSKeyedArchiver archivedDataWithRootObject:infoDict];
     
         self.currentlyPlayingTrackID = fingerprintSearchResult.bestResponse.trackId;
+
+        // If it's not already in our cache or it's been approved (e.g. thumbs up) add it and display the track info
+        if ([self.cachedTracks objectForKey:self.currentlyPlayingTrackID] == nil || [[self.cachedTracks objectForKey:self.currentlyPlayingTrackID] boolValue] == YES) {
+            
+            [self.guidelegate displayCurrentlyPlayingTrackWithData:archivedData];
+            [self.cachedTracks setObject:[NSNull null] forKey:self.currentlyPlayingTrackID];
+        }
     
-        [self.guidelegate displayCurrentlyPlayingTrackWithData:archivedData];
     
 }
 
@@ -402,9 +408,26 @@
 
 - (void)sendSelectedTrackToConnectedPeers {
     NSError *error = nil;
-    NSDictionary *resultsDictionary = @{@"track-id":self.currentlyPlayingTrackID, @"user-id":self.twitterAccount.identifier, @"user-name":self.twitterAccount.username};
+    
+    NSMutableDictionary *resultsDictionary = [[NSMutableDictionary alloc] init];
+    if (self.currentlyPlayingTrackID != nil) {
+        [resultsDictionary setObject:self.currentlyPlayingTrackID forKey:@"track-id"];
+    }
+    
+    if (self.twitterAccount != nil) {
+        if (self.twitterAccount.identifier != nil) {
+            [resultsDictionary setObject:self.twitterAccount.identifier forKey:@"user-id"];
+        }
+        
+        
+        if (self.twitterAccount.username != nil) {
+            [resultsDictionary setObject:self.twitterAccount.username forKey:@"user-name"];
+        }
+    }
+    
     NSData *data = [NSKeyedArchiver archivedDataWithRootObject:resultsDictionary];
     
+    [self.cachedTracks setObject:[NSNumber numberWithBool:YES] forKey:self.currentlyPlayingTrackID];
     [self.mcsession sendData:data toPeers:[self.mcsession connectedPeers] withMode:MCSessionSendDataReliable error:&error];
 }
 
@@ -647,6 +670,9 @@
             if([self.connectedPeers objectForKey:peerID.displayName])
             {
                 [self.connectedPeers removeObjectForKey:peerID.displayName];
+                
+                // Clear our track cache
+                [self.cachedTracks removeAllObjects];
             }
             break;
             

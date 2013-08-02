@@ -69,6 +69,7 @@ typedef enum
 
 @property (strong, nonatomic)          ACAccountStore *accountStore;
 @property (strong, nonatomic)          ACAccount      *twitterAccount;
+@property (strong, nonatomic)          NSMutableDictionary *cachedTracks;
 
 
 -(void)fileSearchResultReceived:(GNSearchResult*) fileSearchResult;
