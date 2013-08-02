@@ -1,2 +1,16 @@
 
 .DS_Store
+
+*.xcscheme
+
+AirIdentifyClient/AirIdentifyClient.xcodeproj/xcuserdata/dspirlock.xcuserdatad/xcschemes/xcschememanagement.plist
+
+AirIdentifyServer/AirIdentifyServer/AirIdentifyServer.xcodeproj/xcuserdata/dspirlock.xcuserdatad/xcschemes/xcschememanagement.plist
+
+Untitled.xcworkspace/xcshareddata/Untitled.xccheckout
+
+Untitled.xcworkspace/xcuserdata/dspirlock.xcuserdatad/UserInterfaceState.xcuserstate
+
+Untitled.xcworkspace/xcuserdata/dspirlock.xcuserdatad/xcdebugger/Breakpoints_v2.xcbkptlist
+
+Untitled.xcworkspace/xcuserdata/dspirlock.xcuserdatad/xcdebugger/Expressions.xcexplist
