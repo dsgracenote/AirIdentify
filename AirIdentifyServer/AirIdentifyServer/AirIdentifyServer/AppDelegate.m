@@ -360,7 +360,7 @@
         User *user = [[fetchedResultsController fetchedObjects] lastObject];
         NSSet *trackInfo = user.trackhistory.trackinfo;
         NSArray *trackInfoArray = [trackInfo allObjects];
-        trackInfoArray = [trackInfoArray filteredArrayUsingPredicate:[NSPredicate predicateWithFormat:@"infoAddedDate<=%lf AND iBeaconID==%@",[NSDate date].timeIntervalSince1970, self.peerID.displayName]];
+        trackInfoArray = [trackInfoArray filteredArrayUsingPredicate:[NSPredicate predicateWithFormat:@"iBeaconID==%@", self.peerID.displayName]];
         
         NSMutableDictionary *artistDict = [NSMutableDictionary dictionaryWithCapacity:10];
         for(TrackInfo* trackinfoObj in trackInfoArray)
