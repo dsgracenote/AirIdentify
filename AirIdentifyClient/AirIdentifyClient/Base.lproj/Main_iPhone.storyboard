@@ -161,6 +161,17 @@
                                                 <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                                 <nil key="highlightedColor"/>
                                             </label>
+                                            <button hidden="YES" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="U95-Mz-m6c">
+                                                <rect key="frame" x="94" y="-6" width="27" height="30"/>
+                                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                                <fontDescription key="fontDescription" type="system" pointSize="15"/>
+                                                <state key="normal" image="player_bt_play">
+                                                    <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                                                </state>
+                                                <connections>
+                                                    <action selector="startStreaminAudio:" destination="vXZ-lx-hvc" eventType="touchUpInside" id="hlX-oU-gsM"/>
+                                                </connections>
+                                            </button>
                                         </subviews>
                                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                         <color key="tintColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
@@ -204,6 +215,7 @@
                         <outlet property="imageView" destination="dOP-TF-IkG" id="I3L-Iz-Zvv"/>
                         <outlet property="mainPlayerView" destination="Qtp-cf-mH2" id="eaw-hl-wMm"/>
                         <outlet property="playButton" destination="tIp-ac-Pee" id="HtJ-ux-wef"/>
+                        <outlet property="startStreamingButton" destination="U95-Mz-m6c" id="39j-M1-lVA"/>
                         <outlet property="thumbsDownButton" destination="z46-YV-9aw" id="QNR-Te-AhW"/>
                         <outlet property="thumbsUpButton" destination="dsK-Ki-R4m" id="mxe-dh-bak"/>
                         <outlet property="trackTitleLabel" destination="VfJ-p7-5If" id="Yf9-0y-iTL"/>

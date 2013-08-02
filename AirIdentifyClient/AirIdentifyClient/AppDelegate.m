@@ -264,6 +264,9 @@
         NSData *archivedData = [NSKeyedArchiver archivedDataWithRootObject:infoDict];
     
         self.currentlyPlayingTrackID = fingerprintSearchResult.bestResponse.trackId;
+        self.currentlyPlayingTrackArtist =response.artist;
+        self.currentlyPlayingTrackTitle = response.trackTitle;
+    self.currentlyPlayingTrackAdjustedSongPosition = response.adjustedSongPosition?response.adjustedSongPosition:response.songPosition;
 
         // If it's not already in our cache or it's been approved (e.g. thumbs up) add it and display the track info
         if ([self.cachedTracks objectForKey:self.currentlyPlayingTrackID] == nil || [[self.cachedTracks objectForKey:self.currentlyPlayingTrackID] boolValue] == YES) {
@@ -617,6 +620,7 @@
     
     NSData *data = [NSKeyedArchiver archivedDataWithRootObject:infoDictionary];
     
+     //self.mcsession= [[MCSession alloc] initWithPeer:self.peerID];
     [browser invitePeer:peerID toSession:self.mcsession withContext:data timeout:30];
 }
 
@@ -657,8 +661,7 @@
 {
     if(state==CLRegionStateInside)
     {
-        if(![self.regionsAlreadyEntered objectForKey:region.identifier])
-        {
+      
             [self.regionsAlreadyEntered removeAllObjects];
             
             [self.regionsAlreadyEntered setObject:region forKey:[region identifier]];
@@ -675,7 +678,6 @@
             self.browser.delegate = self;
             
             NSLog(@"Inside Region");
-        }
     }
     else if(state==CLRegionStateOutside)
     {
@@ -890,6 +892,14 @@
     }];
     
     [self.moviePlayerController play];
+}
+
+-(void) startStreamingMediaItem:(MPMediaItem*) song
+{
+    [self.musicPlayerController setQueueWithItemCollection:[[MPMediaItemCollection alloc] initWithItems:@[song]]];
+    
+    [self.moviePlayerController prepareToPlay];
+    [self.musicPlayerController play];
 }
 
 @end

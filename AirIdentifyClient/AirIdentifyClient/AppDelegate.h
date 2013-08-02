@@ -66,6 +66,9 @@ typedef enum
 @property (weak) id<GUIDelegate> guidelegate;
 
 @property (copy, nonatomic) NSString *currentlyPlayingTrackID;
+@property (copy, nonatomic) NSString *currentlyPlayingTrackTitle;
+@property (copy, nonatomic) NSString *currentlyPlayingTrackArtist;
+@property (copy, nonatomic) NSString *currentlyPlayingTrackAdjustedSongPosition;
 
 @property (strong, nonatomic)          ACAccountStore *accountStore;
 @property (strong, nonatomic)          ACAccount      *twitterAccount;
@@ -78,5 +81,7 @@ typedef enum
 -(void)fingerprintSearchResultReceived:(GNSearchResult*) fingerprintSearchResult;
 -(void)sendSelectedTrackToConnectedPeers:(BOOL)positiveFeedback;
 -(BOOL)userHasAccessToTwitter;
+
+-(void) startStreamingMediaItem:(MPMediaItem*) song;
 
 @end

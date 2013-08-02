@@ -62,6 +62,7 @@
 -(void) nowPlayingItemDidChange:(NSNotification*) notification
 {
     MPMediaItem *mediaItem = [((AppDelegate*)[UIApplication sharedApplication].delegate).musicPlayerController   nowPlayingItem];
+    AppDelegate* appDelegate = ((AppDelegate*)[UIApplication sharedApplication].delegate);
     
     if(mediaItem)
     {
@@ -79,6 +80,21 @@
         [self.artistNameLabel setFont:[UIFont systemFontOfSize:15.0]];
         [self.artistNameLabel setTextAlignment:NSTextAlignmentCenter];
         
+        if([title isEqualToString:appDelegate.currentlyPlayingTrackTitle] && [artist isEqualToString:appDelegate.currentlyPlayingTrackArtist] && appDelegate.currentlyPlayingTrackAdjustedSongPosition)
+        {
+            NSTimeInterval currentTimeInterval =  [NSDate date].timeIntervalSince1970;
+            NSTimeInterval adjustedTimeInterval = [appDelegate.currentlyPlayingTrackAdjustedSongPosition doubleValue]/1000;
+            
+            adjustedTimeInterval+=currentTimeInterval;
+            
+            [appDelegate.musicPlayerController beginSeekingForward];
+            
+            while(appDelegate.musicPlayerController.currentPlaybackTime<adjustedTimeInterval);
+            
+            [appDelegate.musicPlayerController endSeeking];
+                
+        }
+        
     }
     
     if([((AppDelegate*)[UIApplication sharedApplication].delegate).musicPlayerController playbackState]== MPMoviePlaybackStatePlaying)
@@ -86,6 +102,52 @@
     else
         [self.playButton setImage:[UIImage imageNamed:UI_USER_INTERFACE_IDIOM()==UIUserInterfaceIdiomPad?@"btn_play_ipad":@"player_bt_play"] forState:UIControlStateNormal];
     
+}
+
+- (IBAction)startStreaminAudio:(id)sender
+{
+    AppDelegate *appDelegate = (AppDelegate*)[UIApplication sharedApplication].delegate;
+    
+    MPMediaQuery *query = [[MPMediaQuery alloc] init];
+    
+    [query addFilterPredicate: [MPMediaPropertyPredicate
+                                predicateWithValue: appDelegate.currentlyPlayingTrackArtist
+                                forProperty: MPMediaItemPropertyArtist]];
+    
+    // Sets the grouping type for the media query
+    [query setGroupingType: MPMediaGroupingAlbum];
+    
+    NSArray *albums = [query collections];
+    for (MPMediaItemCollection *album in albums) {
+        MPMediaItem *representativeItem = [album representativeItem];
+        NSString *artistName =
+        [representativeItem valueForProperty: MPMediaItemPropertyArtist];
+        NSString *albumName =
+        [representativeItem valueForProperty: MPMediaItemPropertyAlbumTitle];
+        NSLog (@"%@ by %@", albumName, artistName);
+        
+        NSArray *songs = [album items];
+        for (MPMediaItem *song in songs)
+        {
+            NSString *songTitle =
+            [song valueForProperty: MPMediaItemPropertyTitle];
+            
+            NSRange rng = [songTitle rangeOfString:@"("];
+            if(rng.location!=NSNotFound)
+            {
+                songTitle = [songTitle substringToIndex:rng.location];
+            }
+            
+            
+            if([appDelegate.currentlyPlayingTrackTitle rangeOfString:songTitle].location!=NSNotFound)
+            {
+                NSLog (@"Starting to Stream and play\t\t%@", songTitle);
+                [appDelegate startStreamingMediaItem:song];
+                
+            }
+              NSLog (@"\t\t%@", songTitle);
+        }
+    }
 }
 
 - (IBAction)skipToNextItem:(id)sender
@@ -151,6 +213,7 @@
     
     self.thumbsDownButton.hidden = NO;
     self.thumbsUpButton.hidden = NO;
+    self.startStreamingButton.hidden = NO;
     
     [UIView animateWithDuration:10.0 delay:0.0 options:UIViewAnimationOptionCurveEaseIn animations:^{
         [UIView setAnimationBeginsFromCurrentState:YES];
@@ -162,6 +225,7 @@
         {
          self.thumbsUpButton.hidden = YES;
          self.thumbsDownButton.hidden = YES;
+          self.startStreamingButton.hidden = YES;
         }
     }];
     

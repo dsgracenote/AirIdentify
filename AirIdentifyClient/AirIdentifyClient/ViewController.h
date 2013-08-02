@@ -26,12 +26,14 @@
 @property (strong, nonatomic) IBOutlet UIView *currentlyPlayingParentView;
 @property (strong, nonatomic) IBOutlet UIButton *thumbsUpButton;
 @property (strong, nonatomic) IBOutlet UIButton *thumbsDownButton;
+@property (strong, nonatomic) IBOutlet UIButton *startStreamingButton;
 
 @property (strong, nonatomic) IBOutlet UILabel *currentlyPlayingInfoLabel;
 @property (strong, nonatomic) IBOutlet UIView *mainPlayerView;
 
 @property (strong, nonatomic) IBOutlet UIView *historyView;
 @property (strong, nonatomic) IBOutlet UITableView *historyTableView;
+- (IBAction)startStreaminAudio:(id)sender;
 
 - (IBAction)skipToNextItem:(id)sender;
 - (IBAction)skipToPreviousItem:(id)sender;
