@@ -397,7 +397,23 @@
 
 - (void)sendSelectedTrackToConnectedPeers {
     NSError *error = nil;
-    NSDictionary *resultsDictionary = @{@"track-id":self.currentlyPlayingTrackID, @"user-id":self.twitterAccount.identifier, @"user-name":self.twitterAccount.username};
+    
+    NSMutableDictionary *resultsDictionary = [[NSMutableDictionary alloc] init];
+    if (self.currentlyPlayingTrackID != nil) {
+        [resultsDictionary setObject:self.currentlyPlayingTrackID forKey:@"track-id"];
+    }
+    
+    if (self.twitterAccount != nil) {
+        if (self.twitterAccount.identifier != nil) {
+            [resultsDictionary setObject:self.twitterAccount.identifier forKey:@"user-id"];
+        }
+        
+        
+        if (self.twitterAccount.username != nil) {
+            [resultsDictionary setObject:self.twitterAccount.username forKey:@"user-name"];
+        }
+    }
+    
     NSData *data = [NSKeyedArchiver archivedDataWithRootObject:resultsDictionary];
     
     [self.cachedTracks setObject:[NSNumber numberWithBool:YES] forKey:self.currentlyPlayingTrackID];
